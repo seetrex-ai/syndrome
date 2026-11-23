@@ -1,0 +1,1065 @@
+/* Theme (tasks/plans/phase2.md D14; palette B "ink and signal" of
+   tasks/plans/design.md D2). Every colour of the app is a token in a `:root`
+   block (here the shared ones; each panel's stylesheet keeps its own), written
+   as `light-dark(light, dark)` so both themes are defined in one line. Which
+   side resolves is decided by `color-scheme`: "auto" follows the OS, `<html
+   data-theme>` (src/ui/theme/theme.ts, the inline script of index.html) forces
+   one. tests/intent/theme-tokens.test.ts: no literal colour outside these
+   blocks, every token with both sides; tests/intent/theme-contrast.test.ts
+   pins the ratios of the pairs painted on each other. */
+:root {
+  color-scheme: light dark;
+  /* White paper in the light theme (decision of 2026-10-20: white over the
+     warm #f7f5f0), deep ink in the dark one; the card is a neutral grey, 1.12:1
+     from the paper like the old warm pair. */
+  --bg: light-dark(#ffffff, #101214);
+  --fg: light-dark(#111316, #e9e8e3);
+  /* Secondary text (intros, notes, the footer, a step pill not yet reached).
+     Dimming is a colour, never `opacity` on a text container:
+     tests/intent/theme-contrast.test.ts reads the painted ratio from these
+     literals and forbids `opacity` on anything but SVG marks. */
+  --muted: light-dark(#4a5160, #a6adbb);
+  --surface: light-dark(#f1f2f4, #181b20);
+  --border: light-dark(#b8bbc1, #3b4047);
+  /* Verdict text: on --bg AND on the card (--surface), 6.31 / 5.64 in light
+     (#1f7a3a gave 4.40 on the card). */
+  --ok: light-dark(#1b6e34, #5fd27a);
+  /* Palette "Tinta y vino" (decision of 2026-10-18): the accent is a wine
+     red for the Λ figures, the filled track and the brand's Z plaquette; the
+     selected segment, the primary button and the "?" disc are --ink (near
+     black on paper, paper on ink), so the accent stays a signal. The dark
+     accent is a plum (hue ≈ 330), not the first pink (#e07a90), which
+     read like --residual (#ff6b6b) when a
+     wine slider and five "?" discs sat 60 px from the red residual rings.
+     7.40 / 6.80 on --bg / --surface; --on-accent 7.40 on it. */
+  --accent: light-dark(#7a2238, #d98ab8);
+  --on-accent: light-dark(#ffffff, #101214);
+  --ink: light-dark(#1b1d22, #e9e8e3);
+  --on-ink: light-dark(#ffffff, #1b1d22);
+  /* The primary button under the pointer: a lightness step of the ink (the
+     5 % translucent --hover-bg was invisible on it),
+     ≥ 1.5:1 from --ink so the step is seen (1.32 /
+     1.25 were not): 1.57 / 1.52 on --ink, --on-ink 10.73 / 9.06 on it. */
+  --ink-hover: light-dark(#3a3e46, #bfbeb9);
+  /* The brand mark (src/ui/brand/Brand.tsx, public/favicon.svg): two tones of
+     plaquette (the Z ones the accent, the X ones this token) with the qubits
+     as holes in the page colour, so the header and the favicon are the same
+     drawing (the favicon is the dark side). In dark
+     the X tone is the light side of --plaquette-x (peach; its dark side was
+     1.5:1 on the badge). In light that peach was 1.11:1 on the paper and the
+     holes vanished on it: a terracotta instead, 3.61
+     on --bg and 2.75 from the wine accent, so the holes read on both
+     plaquettes (tests/intent/theme-contrast pins --brand-x ≥ 1.3 on --bg and
+     --bg ≥ 3 on --brand-x and on --accent). */
+  --brand-x: light-dark(#c8702e, #fde6cf);
+  /* Text on a badge painted with --plaquette-stroke (step numbers, "?" marks):
+     dark on the light grey, white on the dark grey. */
+  --on-badge: light-dark(#15181d, #ffffff);
+  /* The badge of a step not yet reached and its number. */
+  --badge-dim: light-dark(#e3e5e9, #262d37);
+  --on-badge-dim: light-dark(#4a5160, #c3c9d3);
+  --hover-bg: light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.08));
+  --active-bg: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.12));
+  --shadow: light-dark(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.65));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Safari < 17.5 has no light-dark(): the light side, plain, for every token
+   above (tests/intent/theme-tokens.test.ts keeps the two in step), and the
+   page is light WHATEVER the OS or the stored theme says, native controls
+   included (`color-scheme: dark` on light tokens gave a
+   white page with dark form controls). After the data-theme rules on
+   purpose: same specificity, the later wins. ThemeToggle hides "dark" there. */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --fg: #111316;
+    --muted: #4a5160;
+    --surface: #f1f2f4;
+    --border: #b8bbc1;
+    --ok: #1b6e34;
+    --accent: #7a2238;
+    --on-accent: #ffffff;
+    --ink: #1b1d22;
+    --on-ink: #ffffff;
+    --ink-hover: #3a3e46;
+    --brand-x: #c8702e;
+    --on-badge: #15181d;
+    --badge-dim: #e3e5e9;
+    --on-badge-dim: #4a5160;
+    --hover-bg: rgb(0 0 0 / 0.05);
+    --active-bg: rgb(0 0 0 / 0.08);
+    --shadow: rgb(0 0 0 / 0.18);
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: light;
+  }
+}
+
+/* Typography (design.md D3): a self-hosted display face for titles, the
+   tagline, the step names and the Λ figures; the system stack for text. The
+   stacks and the scale live on `html`, not in the colour token block above
+   (which admits only numbers and light-dark()). The font is subset (latin,
+   latin-ext; 32 kB woff2, SIL OFL 1.1, public/fonts/OFL-SpaceGrotesk.txt),
+   preloaded by index.html and precached by the service worker. The Greek Λ is
+   not in the face: the fallback draws it. */
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-var.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  --font-display:
+    "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --step-1: 1.125rem;
+  --step-2: 1.375rem;
+  --step-3: clamp(2rem, 1.2rem + 3.5vw, 3rem);
+  --radius-card: 0.875rem;
+}
+
+:root {
+  font-family: var(--font-text);
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Visually hidden, still read and still focusable (legends, labels). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mobile first (docs/spec.md §4 phase 2 point 8, tasks/plans/ui.md §6):
+   one column, 16 px gutters, controls with a ≥ 44 px target; wider screens
+   only add room. */
+.app {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem 1.5rem;
+}
+
+button,
+select {
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem;
+  font: inherit;
+}
+
+input[type="range"] {
+  min-height: 2.75rem;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .app {
+    padding: 1rem 1.5rem 2rem;
+  }
+
+  button,
+  select {
+    min-height: 2.25rem;
+  }
+
+  input[type="range"] {
+    min-height: 2.25rem;
+  }
+}
+
+/* Header: the product's name left, the two preference controls right; on a
+   phone the controls go under the name on one row. */
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.25rem 0 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* The product's name, the page's h1: the display face at the size of a
+   section heading; the tagline below stays the biggest text. */
+.app__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+/* The brand bar (src/ui/brand/SiteHeader.tsx, LangSwitch.tsx): the brand
+   site's (seequant.app) header, copied from its styles (2026-10-20,
+   products navigation: .site-header, .brand, .site-menu, .site-nav,
+   .nav-group, .products-panel, .lang-switch) with the same sizes and
+   threshold. Below 900 px the mark, the language switch and the menu button
+   on one row (16 px of padding + 44 px of controls + the 1 px hairline =
+   61 px), the navigation under them only while the menu is open, with the
+   products group expanded in it; from 900 px one row 73 px tall (28 px of
+   padding + 44 + 1), the mark on the left and the navigation, in --muted,
+   grouped on the right with the language switch. No "Try Syndrome" pill (we
+   are in Syndrome), so nothing else sets the height.
+   The row follows the app's own container, not the brand site's: the same
+   max-width as .app (64 rem, 80 rem from 1 024 px), the same 1 / 1.5 rem
+   side padding and the same content-box sizing, so its edges sit on
+   Syndrome's content edges at every width (tests/intent/brand-bar-layout
+   pins it, and the heights and colours). */
+.site-header {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header__inner {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-template-areas:
+    "brand lang menu"
+    "nav nav nav";
+  align-items: center;
+  gap: 0 0.5rem;
+  /* content-box like .app, so the same max-width and side padding put the
+     bar's edges exactly on the app's content edges. */
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.site-brand {
+  grid-area: brand;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  justify-self: start;
+  min-height: 2.75rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.site-brand__word {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+/* The bar's targets: one row of 44 px, native buttons without their look. */
+.site-menu,
+.site-nav a,
+.nav-group__button,
+.lang-switch__option {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--fg);
+}
+
+.site-menu,
+.nav-group__button,
+.lang-switch__option {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+
+.site-menu {
+  grid-area: menu;
+  gap: 0.5rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.875rem;
+}
+
+.site-menu:hover {
+  background: var(--hover-bg);
+}
+
+.site-menu[aria-expanded="true"] {
+  background: var(--active-bg);
+}
+
+.site-menu__icon,
+.nav-group__caret {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site-nav {
+  grid-area: nav;
+}
+
+.site-nav ul,
+.products-panel__links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.125rem;
+}
+
+.site-nav a {
+  text-decoration: none;
+}
+
+/* Hover; the app link inside the products group (this page, A2) and
+   "Products" (this page's section, as the brand site's data-current) in
+   the accent. */
+.site-nav a:hover,
+.nav-group__button:hover,
+.site-nav a[aria-current="page"],
+.nav-group__button[data-current] {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.site-nav a[aria-current="page"],
+.nav-group__button[data-current] {
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+/* "Products ▾" (as on the brand site): from 900 px a button in the row whose
+   panel drops under it, a small card on --bg with a hairline and a soft
+   shadow, no motion; below 900 px that button is not rendered and the
+   phone menu shows the same panel expanded (.nav-group-flat). The panel is
+   hidden by its `hidden` attribute, which this rule makes win over any
+   display; no rule sets the panel's own display. */
+.nav-group__panel[hidden] {
+  display: none;
+}
+
+.nav-group__button {
+  gap: 0.375rem;
+}
+
+.nav-group__caret {
+  stroke-width: 1.5;
+}
+
+.nav-group__button[aria-expanded="true"] .nav-group__caret {
+  transform: rotate(180deg);
+}
+
+.products-panel {
+  display: grid;
+  gap: 0.25rem;
+}
+
+/* border-box: the links' left padding stays inside the menu's width. */
+.site-nav .products-panel a {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.75rem;
+  color: var(--fg);
+}
+
+.site-nav .products-panel .products-panel__name {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.125rem;
+  padding-block: 0.375rem;
+}
+
+.products-panel__title {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.products-panel__description {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.site-nav .products-panel__links a {
+  padding-left: 0.75rem;
+}
+
+.site-nav .products-panel .products-panel__all {
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--border);
+}
+
+/* The label over the expanded group in the phone menu (not a control). */
+.nav-group-flat__label {
+  display: block;
+  padding-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Language switch: "EN ES", the current one a small ink chip (not a
+   control), the other a plain button whose hit area is 44 × 44 px whatever
+   it looks like. */
+.lang-switch {
+  grid-area: lang;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.lang-switch__option,
+.lang-switch__current {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-switch__option {
+  min-width: 2.75rem;
+  border-radius: 0.5rem;
+  color: var(--muted);
+  letter-spacing: inherit;
+}
+
+.lang-switch__option:hover {
+  background: var(--hover-bg);
+  color: var(--fg);
+}
+
+.lang-switch__option:active {
+  background: var(--active-bg);
+}
+
+.lang-switch__current {
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* Focus as on the brand site: always visible, in --ink; the menu button
+   keeps its pill. The current language's chip takes the focus after a
+   switch made from the keyboard (LangSwitch.tsx). */
+.site-brand:focus-visible,
+.site-menu:focus-visible,
+.site-nav a:focus-visible,
+.nav-group__button:focus-visible,
+.lang-switch__option:focus-visible,
+.lang-switch__current:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.site-brand:focus-visible,
+.site-nav a:focus-visible,
+.nav-group__button:focus-visible,
+.lang-switch__option:focus-visible {
+  border-radius: 2px;
+}
+
+@media (min-width: 640px) {
+  .site-header__inner {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+}
+
+/* Phone and tablet: the navigation only while the menu is open, with the
+   products group expanded in it. */
+@media (max-width: 899.98px) {
+  .site-menu[aria-expanded="false"] + .site-nav {
+    display: none;
+  }
+
+  .site-nav {
+    margin-top: 0.5rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .site-nav ul {
+    flex-direction: column;
+  }
+
+  .site-nav a {
+    width: 100%;
+    font-size: 1.0625rem;
+  }
+
+  /* The desktop button and panel are not rendered: the group is expanded. */
+  .nav-group {
+    display: none;
+  }
+
+  .nav-group-flat {
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+/* Narrow phones (< 390 px): the brand site shows the menu button's icon
+   alone there; Syndrome keeps its label (decision of 2026-10-20) by tightening
+   the row instead: smaller gaps, an 18 px wordmark and less button padding.
+   Measured in Chrome (mobile viewport) at 320 px in es and en: brand 121 +
+   "EN ES" 74 + "Menú" 79 + gaps 8 = 282 of 288 px, no horizontal scroll. */
+@media (max-width: 389.98px) {
+  .site-header__inner {
+    column-gap: 0.25rem;
+  }
+
+  .site-brand {
+    gap: 0.5rem;
+  }
+
+  .site-brand__word {
+    font-size: 1.125rem;
+  }
+
+  .site-menu {
+    gap: 0.375rem;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .site-header__inner {
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas: "brand . nav lang";
+    gap: 0 1.25rem;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .site-menu {
+    display: none;
+  }
+
+  .site-nav ul {
+    gap: 0 1.5rem;
+  }
+
+  .site-nav a,
+  .nav-group__button {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .site-nav a:hover,
+  .nav-group__button:hover,
+  .nav-group__button[data-current],
+  .nav-group__button[aria-expanded="true"] {
+    color: var(--fg);
+  }
+
+  .nav-group-flat {
+    display: none;
+  }
+
+  .nav-group {
+    position: relative;
+  }
+
+  .nav-group__panel {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: -1rem;
+    z-index: 20;
+    box-sizing: border-box;
+    width: 17.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--bg);
+    box-shadow: 0 0.75rem 2rem -0.75rem var(--shadow);
+  }
+
+  /* The panel's links stay in --fg: .site-nav .products-panel a outranks
+     .site-nav a above. */
+  .site-nav .products-panel__links a {
+    min-height: 2.25rem;
+  }
+}
+
+.brand__mark {
+  flex: 0 0 auto;
+  display: block;
+}
+
+.brand__plaquette--z {
+  fill: var(--accent);
+}
+
+.brand__plaquette--x {
+  fill: var(--brand-x);
+}
+
+.brand__qubit {
+  fill: var(--bg);
+}
+
+/* The theme control, right of the name (the language switch moved to the
+   brand bar on 2026-10-20). */
+.app__prefs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+/* On a phone the theme sits on the name's row, down to 320 px in both
+   languages: its segments show their icon alone, 44 × 44 (controls.css,
+   .segmented__option--icon; the text stays their accessible name), 144 px
+   in all, next to "Syndrome" (measured in Chrome at 320 px).
+   Until 2026-10-20 the theme and the language shared a full-width row under
+   the name; the header's wrap stays as the safety net of
+   a wider system font. The header's spacing is tighter too, so the claim
+   and the chart start higher. */
+@media (max-width: 639.98px) {
+  .app {
+    padding-top: 0.5rem;
+  }
+
+  .app__header {
+    row-gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .app__prefs .segmented__options {
+    flex-wrap: nowrap;
+  }
+
+  .app__prefs .segmented__option {
+    padding: 0 0.5625rem;
+    font-size: 0.8125rem;
+  }
+
+  .app__prefs .segmented__option--icon {
+    padding: 0;
+  }
+
+  .app__tagline {
+    margin-top: 1.25rem;
+  }
+}
+
+/* The claim of the first screen (design.md D1): the biggest text of the page,
+   right above the chart. */
+.app__tagline {
+  max-width: 22ch;
+  margin: 1.75rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Panels as cards from 640 px (design.md §2 B): a surface with a hairline
+   border; on a phone they run edge to edge of the gutter so the lattice keeps
+   its 328 px (tests/intent/ui-conventions: the 24 px touch target at d = 9). */
+.panel {
+  margin-top: 1.5rem;
+  padding: 1.25rem 0 0.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.panel--hero {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+@media (min-width: 640px) {
+  .panel {
+    padding: 1.5rem 1.5rem 1.625rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+  }
+
+  .panel--hero {
+    margin-top: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* The first figure (design.md D1, ≥ 960 px): the chart on the left, the
+   model, the Λ tiles and the counters on the right (placed by chart.css),
+   the base note and the explanations under both. The container, the title
+   and the figure are here so the skeleton already has the final layout. */
+@media (min-width: 960px) {
+  .panel--hero {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      "title title"
+      "figure model"
+      "figure lambda"
+      "figure status"
+      "figure stats"
+      "base base"
+      "explain explain";
+    column-gap: 2rem;
+    align-items: start;
+  }
+
+  .panel--hero > h2 {
+    grid-area: title;
+  }
+
+  .panel--hero > figure.chart {
+    grid-area: figure;
+  }
+}
+
+/* Desktop (≥ 1024 px; since 2026-10-18, when the spacetime viewer
+   did not fit a PC monitor): the lattice, the steps, the viewer and the challenge
+   put their figure on the left and everything else (title, controls, step
+   pills, explanation, buttons) on the right, and the figure is capped by the
+   viewport's height so it is seen whole once its panel is scrolled to: the
+   panel lands `--nav-height` + 0.5 rem from the top (the `.panel`
+   `scroll-margin-top` in src/ui/nav/nav.css; the sticky `top` below uses
+   the same 0.5 rem), its padding-top is 1.5 rem (`.panel` at ≥ 640 px above),
+   and 1 rem stays free under it: 0.5 + 1.5 + 1 = 3 rem, so the cap is
+   100dvh − --nav-height − 3 rem. Change either of those two and this
+   constant with it (the test below reads both). The viewer is also capped at
+   60 rem (960 px): at 1920 × 1080 the window allows 985 px, and beyond that
+   (2560 × 1440: 1 345 px) it only grew, pushing the text column to its
+   22 rem minimum. The SVGs scale by height (their viewBox
+   keeps the drawing's proportions; `max-width` lets a narrow column shrink
+   them instead of overflowing). The page widens to 80 rem: at 64 rem the two
+   columns of the 1440/1920 px screens left ~23 rem of text next to a 30 rem
+   lattice; at 80 rem the text column gets ~38 rem beside a lattice capped at
+   32 rem (the figures read as too big: the 2D lattice grows only from
+   30 to 32 rem; the viewer is the one that needed the height).
+   The figure column is as wide as the figure (max-content, never under the
+   text's 22 rem); 24 auto rows then a 1fr one, and the figure spans them all,
+   so its height lands on the flexible row and never spreads the right-hand
+   items apart. Sticky: the figure stays in view while the right column
+   (taller in the viewer) is read. Below 1024 px nothing here applies: the
+   phone and tablet layout is the one above. tests/intent/design-conventions
+   (test_intent_desktop_two_columns_figure_fits) pins the grid, the rows, the
+   sticky offset and both caps, each directly under this block. */
+@media (min-width: 1024px) {
+  .app,
+  .site-header__inner {
+    max-width: 80rem;
+  }
+
+  .panel--grid,
+  .panel--steps,
+  .panel--spacetime,
+  .panel--challenge:not([data-phase="idle"]) {
+    display: grid;
+    grid-template-columns: minmax(0, max-content) minmax(22rem, 1fr);
+    grid-template-rows: repeat(24, auto) 1fr;
+    column-gap: 2.5rem;
+    align-items: start;
+  }
+
+  .panel--grid > *,
+  .panel--steps > *,
+  .panel--spacetime > *,
+  .panel--challenge:not([data-phase="idle"]) > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .panel--grid > svg.grid,
+  .panel--steps > svg.grid,
+  .panel--spacetime > svg.spacetime__svg,
+  .panel--challenge > .challenge__figure {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    position: sticky;
+    top: calc(var(--nav-height) + 0.5rem);
+    margin: 0;
+  }
+
+  .panel--grid > svg.grid,
+  .panel--steps > svg.grid,
+  .panel--challenge > .challenge__figure > svg.grid {
+    width: auto;
+    max-width: 100%;
+    height: min(32rem, calc(100dvh - var(--nav-height) - 3rem));
+  }
+
+  .panel--spacetime > svg.spacetime__svg {
+    width: auto;
+    max-width: 100%;
+    height: min(60rem, calc(100dvh - var(--nav-height) - 3rem));
+  }
+}
+
+.app__footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.app__byline {
+  margin: 0.75rem 0 0;
+}
+
+/* The links to the brand site's forms (src/ui/footer/FormLinks.tsx), in the
+   footer and at the end of a challenge, and the brand navigation above them
+   in the footer: wrap on a phone, 44 px targets. */
+.brand-links,
+.form-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.brand-links a,
+.form-links a {
+  display: inline-flex;
+  align-items: center;
+  /* 44 px wide too: "Lab" and "Tools" measured 22 and 32 px (2026-10-20);
+     the text stays left-aligned in its target. */
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--fg);
+}
+
+/* The brand row reads as navigation: no underline until pointed at, the
+   home link in the wordmark's face; a hairline separates it from the forms. */
+.brand-links {
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-links a {
+  text-decoration: none;
+}
+
+.brand-links a:hover,
+.brand-links a:focus-visible {
+  text-decoration: underline;
+}
+
+.brand-links li:first-child a {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* Service worker notice (src/ui/pwa/UpdateToast.tsx): one card at the bottom,
+   above the content, never wider than the page. */
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  box-shadow: 0 0.5rem 1.5rem var(--shadow);
+  animation: toast-in 250ms ease;
+}
+
+/* Empty at rest (the live region stays mounted): no card, no height, no clicks. */
+.toast[data-open="0"] {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  pointer-events: none;
+  animation: none;
+}
+
+.toast__text {
+  margin: 0;
+}
+
+.toast__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* The chart's Suspense fallback (ChartSkeleton.tsx) reserves the room the
+   loaded panel takes, so the lattice below does not jump when the deferred
+   chunk arrives (Lighthouse CLS 0.26 measured on the mobile preset before
+   this: section#panel-grid moved ~900 px). The heights are the loaded panel's
+   children measured in Chrome (English; Spanish runs a few lines longer, a
+   shift that lands outside the first viewport): model select, figure with
+   its caption, status line, stats table, Λ tiles, base note, explanations.
+   The placeholders carry their own class names: no chart hook (`.chart__lambda`,
+   `.chart__base[data-base-model]`) exists before the real panel does. */
+/* The model select on a phone: one line per label from 360 px, the two
+   segments stacked below (controls.css .segmented--fill; 2026-10-20,
+   fix/small-phones: the select measured 93 and 139 px in Chrome, and the
+   figure below moves 0 px when the chart loads). */
+.chart-skeleton__model {
+  min-height: 93px;
+}
+
+@media (max-width: 359.98px) {
+  .chart-skeleton__model {
+    min-height: 139px;
+  }
+}
+
+.chart--skeleton {
+  min-height: 503px;
+}
+
+.chart-skeleton__status {
+  min-height: 25px;
+}
+
+.chart-skeleton__stats {
+  min-height: 77px;
+}
+
+.chart-skeleton__lambda {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem;
+  min-height: 246px;
+  margin: 1rem 0 0;
+}
+
+.chart-skeleton__lambda > div {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.chart-skeleton__base {
+  min-height: 43px;
+}
+
+.chart-skeleton__explain {
+  min-height: 80px;
+}
+
+@media (min-width: 640px) {
+  .chart-skeleton__model {
+    min-height: 91px;
+  }
+
+  .chart--skeleton {
+    min-height: 481px;
+  }
+
+  .chart-skeleton__lambda {
+    min-height: 128px;
+  }
+
+  .chart-skeleton__base {
+    min-height: 22px;
+  }
+
+  .chart-skeleton__explain {
+    min-height: 36px;
+  }
+}
+
+/* The hero grid (index.css): same areas as the loaded panel (chart.css). */
+@media (min-width: 960px) {
+  .panel--hero > .chart-skeleton__model {
+    grid-area: model;
+  }
+
+  .panel--hero > .chart-skeleton__status {
+    grid-area: status;
+  }
+
+  .panel--hero > .chart-skeleton__stats {
+    grid-area: stats;
+  }
+
+  .panel--hero > .chart-skeleton__lambda {
+    grid-area: lambda;
+    grid-template-columns: 1fr;
+    min-height: 278px;
+    margin-top: 0;
+  }
+
+  .panel--hero > .chart-skeleton__base {
+    grid-area: base;
+  }
+
+  .panel--hero > .chart-skeleton__explain {
+    grid-area: explain;
+  }
+}

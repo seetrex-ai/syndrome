@@ -1,0 +1,13 @@
+// A control for tests/intent/design-conventions (test_intent_step_texts_are_never_clamped):
+// a mutant that turns the test red, a step text wrapped in <Clamp>. Not a source file (.txt).
+export function Mutant({ t }: { t: (k: string) => string }) {
+  return (
+    <div>
+      <Clamp className="steps__intro">{t("steps.intro")}</Clamp>
+      <Clamp className="steps__explain">
+        <strong className="steps__name">{t("steps.name.errors")}</strong>
+        {t("steps.explain.errors")}
+      </Clamp>
+    </div>
+  );
+}

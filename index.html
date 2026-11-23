@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The display face (src/index.css @font-face; tasks/plans/design.md D3),
+         fetched before the stylesheet asks for it. -->
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Browser chrome colour: --bg of src/index.css per scheme. A forced
+         theme rewrites the `media` of both from applyTheme (src/ui/theme/theme.ts). -->
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+      data-scheme="light"
+    />
+    <meta
+      name="theme-color"
+      content="#101214"
+      media="(prefers-color-scheme: dark)"
+      data-scheme="dark"
+    />
+    <!-- The root-relative paths of this file (/favicon.svg, /fonts/…) get
+         Vite's base (/syndrome/) at build time. -->
+    <!-- The stored theme before the first paint, so a dark page never flashes
+         light, and the browser chrome colour with it (the metas above). The
+         only script outside React (docs/decisiones.md 2026-10-18); it mirrors
+         readStoredTheme + applyTheme of src/ui/theme/theme.ts, including the
+         browser without light-dark(): light page, light meta, "dark" as auto. -->
+    <script>
+      try {
+        var ld =
+          typeof CSS === "undefined" ||
+          typeof CSS.supports !== "function" ||
+          CSS.supports("color", "light-dark(#000, #fff)");
+        var t = localStorage.getItem("syndrome.theme");
+        if (!ld && t === "dark") t = null;
+        var metas = document.querySelectorAll(
+          'meta[name="theme-color"][data-scheme]',
+        );
+        if (t === "light" || t === "dark") {
+          document.documentElement.dataset.theme = t;
+        }
+        var force = !ld ? "light" : t === "light" || t === "dark" ? t : null;
+        if (force !== null) {
+          for (var i = 0; i < metas.length; i++)
+            metas[i].setAttribute(
+              "media",
+              metas[i].getAttribute("data-scheme") === force
+                ? "all"
+                : "not all",
+            );
+        }
+      } catch (e) {}
+    </script>
+    <!-- Per language, from src/locales (tools/seo/locale-pages.ts;
+         tasks/plans/syndrome-es-url.md D1, D2): lang, title, description,
+         canonical, hreflang, OpenGraph and JSON-LD replace the marker below
+         in index.html and es/index.html (build) or per request (dev). This
+         file carries no visible text of its own. -->
+    <!--syndrome:seo-->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

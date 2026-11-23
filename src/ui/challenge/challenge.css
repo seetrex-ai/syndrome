@@ -1,0 +1,164 @@
+/* Challenge panel (phase 2, tasks/plans/phase2.md D11). Mobile first: one
+   column, 44 px controls inherited from index.css, the share row stacked;
+   640 px and up flows the buttons in one row. */
+.challenge__intro {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* The clock and the counters as tiles (design.md D4): the figure in the
+   display face, one card per reading. */
+.challenge__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge__status p {
+  margin: 0;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--bg);
+  font-size: 0.875rem;
+}
+
+.challenge__timer {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.challenge__timer:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.challenge__timer[data-urgent="1"] {
+  color: var(--residual);
+}
+
+.challenge__live {
+  min-height: 1.5rem;
+  margin: 0.75rem 0 0.25rem;
+  line-height: 1.45;
+}
+
+.challenge__live p {
+  margin: 0 0 0.25rem;
+}
+
+.challenge__verdict {
+  font-weight: 600;
+}
+
+/* Green only for an accepted answer in time; a forfeit reads as failed even
+   when the judge accepted the flips. */
+.challenge__verdict[data-accepted="1"][data-forfeited="0"] {
+  color: var(--ok);
+}
+
+.challenge__verdict[data-accepted="0"],
+.challenge__verdict[data-forfeited="1"] {
+  color: var(--residual);
+}
+
+/* Screen-reader announcements of the clock (10 s, 5 s): present, not painted. */
+.challenge__announce {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.challenge__points {
+  font-weight: 700;
+}
+
+.challenge__controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.challenge__controls .challenge__wide {
+  grid-column: 1 / -1;
+}
+
+.challenge__controls + .challenge__controls {
+  margin-top: 0.5rem;
+}
+
+/* After the verdict: "Liked it?" and the form links (analytics.md D8). */
+.challenge__follow {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.challenge__follow p {
+  margin: 0;
+}
+
+.challenge__share {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.challenge__share h3 {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.challenge__url {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  box-sizing: border-box;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+}
+
+.challenge__note {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.challenge__record {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+@media (min-width: 640px) {
+  .challenge__controls {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .challenge__share {
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+  }
+
+  .challenge__url {
+    min-height: 2.25rem;
+  }
+}

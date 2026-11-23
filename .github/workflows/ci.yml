@@ -1,0 +1,89 @@
+name: CI
+
+# Every push, on every branch (preview branches included), and every PR.
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  # Cloudflare: main deploys to production (https://seequant.app/syndrome/, plus the
+  # legacy syndrome.seequant.app that redirects there); any other branch uploads a
+  # preview version with its own URL. Both steps are skipped until the repo has the
+  # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets (token permissions:
+  # Workers Scripts: Edit, Account Settings: Read, and Workers Routes: Edit on the
+  # zone seequant.app, since wrangler.jsonc binds routes on it).
+  deploy:
+    name: deploy to Cloudflare
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # The Umami website ID (public, so a repo variable, not a secret) reaches
+      # ONLY the steps of main that read it: the production build, which then
+      # injects the counter (tools/deploy/umami-plugin.ts), and the production
+      # gate, which checks dist/ against it. It is repeated in each step's env
+      # rather than set at job level so the preview build never sees it, not
+      # even as "": without it nothing is injected and previews never count
+      # (tasks/plans/analytics.md D9). A new main step that reads the ID needs
+      # it too (tests/intent/production-gate.test.ts checks every one).
+      - name: build (main, with analytics)
+        if: github.ref == 'refs/heads/main'
+        run: npm run build
+        env:
+          VITE_UMAMI_WEBSITE_ID: ${{ vars.VITE_UMAMI_WEBSITE_ID }}
+      - name: build (other branches, no analytics)
+        if: github.ref != 'refs/heads/main'
+        run: npm run build
+      # Production runs plain `wrangler deploy`: the final configuration of the
+      # move to /syndrome/ (docs/decisiones.md 2026-10-19), already live, with
+      # 301s and the retiring service worker on syndrome.seequant.app. Every push
+      # to main redeploys it as is.
+      # The production gate (tools/deploy/check-prod.ts, UMAMI_READY in
+      # tools/deploy/accounts.ts): blocks a dist/ that does not match the
+      # analytics state production should have.
+      - name: production gate (main)
+        if: env.CLOUDFLARE_API_TOKEN != '' && github.ref == 'refs/heads/main'
+        run: npm run check:prod -- --production
+        env:
+          VITE_UMAMI_WEBSITE_ID: ${{ vars.VITE_UMAMI_WEBSITE_ID }}
+      - name: production (main)
+        if: env.CLOUDFLARE_API_TOKEN != '' && github.ref == 'refs/heads/main'
+        run: npx wrangler deploy
+      - name: preview (other branches)
+        if: env.CLOUDFLARE_API_TOKEN != '' && github.ref != 'refs/heads/main'
+        run: npx wrangler versions upload --tag "${GITHUB_REF_NAME//\//-}" --message "${GITHUB_SHA::7}"
+      - name: secrets missing
+        if: env.CLOUDFLARE_API_TOKEN == ''
+        run: echo "CLOUDFLARE_API_TOKEN not set; deploy skipped (local 'npm run deploy' still works)."
+
+  # The validation against the PyMatching reference (`npm run validate`: statistical
+  # gates, exact d = 3 check, minimum weights, metadata and the internal consistency of
+  # every point with its own counts; byte-identical docs/validacion/browser.json) is a
+  # separate workflow, validate.yml, triggered by pushes that touch src/core/,
+  # tools/validate/, docs/validacion/, package*.json, .nvmrc or validate.yml itself.
+  # docs/validacion.md is written locally, not by CI.

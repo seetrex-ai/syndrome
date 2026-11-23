@@ -1,0 +1,329 @@
+{
+  "a11y": {
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "sectionNav": "Sections"
+  },
+  "app": {
+    "title": "Syndrome",
+    "tagline": "More qubits, fewer errors.",
+    "byline": "Syndrome by SEEQuant"
+  },
+  "siteNav": {
+    "brand": "SEEQuant",
+    "label": "Main",
+    "menu": "Menu",
+    "products": "Products",
+    "productsPanel": {
+      "tagline": "Quantum error correction",
+      "openApp": "Open the app",
+      "syndromeChart": "What the chart says",
+      "syndromeMethod": "How we check it",
+      "all": "All products"
+    },
+    "nav": {
+      "lab": "Lab",
+      "classroom": "Classroom",
+      "about": "About SEEQuant"
+    }
+  },
+  "meta": {
+    "title": "Syndrome: quantum error correction simulator · SEEQuant",
+    "description": "Play with the surface code and watch the logical error rate fall as you add qubits, while the noise stays below the threshold. Free, in your browser.",
+    "about": "Syndrome is an interactive simulator of quantum error correction with the rotated surface code. Inject errors, watch the decoder correct them and see why adding qubits lowers the logical error rate when the hardware is below the threshold."
+  },
+  "footer": {
+    "links": "More",
+    "feedback": "Send feedback",
+    "interest": "Using Syndrome to teach? Tell us",
+    "mailSubject": {
+      "feedback": "Syndrome feedback",
+      "interest": "Interest in Syndrome"
+    },
+    "brandNav": "SEEQuant site",
+    "brand": {
+      "home": "SEEQuant",
+      "products": "Products",
+      "lab": "Lab",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Español",
+    "code": {
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "theme": {
+    "label": "Theme",
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "pwa": {
+    "offlineReady": "Syndrome is ready to work offline.",
+    "updateAvailable": "A new version is available.",
+    "reload": "Reload",
+    "close": "Close"
+  },
+  "grid": {
+    "title": "Surface code",
+    "hint": "Tap a qubit for an X error; hold it (or Shift+click, Shift+Enter) for a Z error. Both together make a Y.",
+    "distance": "Distance",
+    "clear": "Clear",
+    "random": "Random errors",
+    "p": "Error probability",
+    "verdict": {
+      "ok": "Corrected: what is left of error and correction is a stabilizer; the logical qubit is intact.",
+      "x": "Logical X error: error and correction together flip the logical qubit (bit flip).",
+      "z": "Logical Z error: error and correction together flip the phase of the logical qubit.",
+      "xz": "Logical Y error: both a bit flip and a phase flip of the logical qubit."
+    },
+    "qubit": "Qubit ({{row}}, {{col}}), error {{pauli}}",
+    "qubitNoError": "Qubit ({{row}}, {{col}}), no error",
+    "qubitHidden": "Qubit ({{row}}, {{col}})",
+    "plaquette": "{{type}} stabilizer ({{row}}, {{col}})",
+    "legend": {
+      "zPlaquette": "Z stabilizer (detects X errors)",
+      "xPlaquette": "X stabilizer (detects Z errors)",
+      "defect": "Defect: a flipped stabilizer",
+      "chain": "Correction chain"
+    }
+  },
+  "steps": {
+    "title": "Step by step",
+    "intro": "One random shot, replayed slowly: what the noise did, what the code saw, what the decoder decided and whether it worked.",
+    "measurementsPerfect": "Perfect measurements, one cycle.",
+    "errors": "Errors",
+    "defects": "Defects",
+    "matching": "Matching",
+    "correction": "Correction",
+    "verdict": "Verdict",
+    "explain": {
+      "errors": "Noise hits some data qubits: X flips a bit, Z flips a phase, Y does both. Nobody can look at the qubits directly without disturbing the encoded information.",
+      "defects": "Each stabilizer measures the joint parity of its neighbouring qubits: Z stabilizers detect X errors, X stabilizers detect Z errors. A stabilizer whose result changed is a defect, and the set of defects is the syndrome. A chain of errors shows only at its ends; a chain that reaches an edge of its kind shows only one, and a chain that runs from one edge to the opposite edge of its kind shows none at all.",
+      "matching": "The decoder pairs the defects with each other, or with the boundary, so that the total length of the connecting paths is as small as possible: a minimum-weight perfect matching. Short chains of errors are more likely than long ones.",
+      "correction": "Along each matched pair the decoder applies flips of the same kind (a second flip undoes the first). This removes every defect, but the correction need not be the chain the noise actually made: only its ends are known.",
+      "verdict": "What remains is the error times the correction, with no defects left. Count its X flips along any complete row and its Z flips along any complete column (a Y counts as both): both counts even means a product of stabilizers and the logical qubit is intact; either count odd means a logical operator: the information changed and no measurement noticed."
+    },
+    "prev": "Back",
+    "next": "Next",
+    "play": "Play",
+    "pause": "Pause",
+    "restart": "Repeat",
+    "newShot": "New random shot",
+    "gridLabel": "Surface code, step by step"
+  },
+  "chart": {
+    "title": "Logical error rate",
+    "model": {
+      "independent": "Noise model: independent X and Z errors, each with probability p per data qubit; perfect measurements, one cycle.",
+      "phenomenological": "Noise model: independent X and Z errors, each with probability p per data qubit per cycle, and measurement failures with probability p; d cycles, perfect final readout."
+    },
+    "modelSelect": {
+      "label": "Noise model",
+      "independent": "Perfect measurements",
+      "phenomenological": "Measurement failures"
+    },
+    "axis": {
+      "p": "Physical error probability p",
+      "pl": "Logical error rate P_L"
+    },
+    "loading": "Loading the chart…",
+    "legend": {
+      "d": "d = {{d}}"
+    },
+    "shots_one": "{{count, number}} live shot",
+    "shots_other": "{{count, number}} live shots",
+    "throughput": "{{rate, number}} shots/s",
+    "lambda": {
+      "label": "Λ = P_L(d = {{d}}) / P_L(d = {{next}}) at p = {{p}}",
+      "value": "{{ratio}} (95 % interval {{low}} to {{high}})",
+      "undefined": "Not defined: both points need at least one logical error.",
+      "noNoise": "Not defined at p = 0: without noise no shot ever fails, so there is no logical error rate to compare."
+    },
+    "upperBound": "Upper bound: no logical error seen yet at this point.",
+    "running": "Simulating in the background: the validated base curves are refined as live shots come in.",
+    "done": "Simulation finished in {{seconds}} s.",
+    "error": "The simulation stopped with an error: {{message}}",
+    "unavailable": "This browser cannot run the simulation; the curves shown are the validated base.",
+    "workerLost": "The simulation engine of this build is gone; reload the page to update. The curves shown are the validated base.",
+    "base": "Base: {{shots, number}} validated shots per point, compared with PyMatching.",
+    "baseRange": "Base: {{min, number}} to {{max, number}} validated shots per point, compared with PyMatching.",
+    "svgLabel": "{{pl}} against {{p}}. {{model}}"
+  },
+  "challenge": {
+    "title": "Challenge: you are the decoder",
+    "intro": "The code shows you its defects, not its errors. Draw a correction that removes every defect without flipping the logical qubit, against the clock.",
+    "hint": "Tap a qubit to add an X flip; hold it (or Shift+click) for a Z flip. Any correction that leaves only a stabilizer is accepted: it need not be the decoder's.",
+    "start": "New puzzle",
+    "submit": "Submit",
+    "giveUp": "Give up",
+    "next": "Next puzzle",
+    "playNew": "Play a new puzzle",
+    "begin": "Start",
+    "readyHint": "A puzzle for you. Press Start when you are ready: the clock begins then.",
+    "timeLeft": "Time left: {{seconds}} s",
+    "secondsLeft_one": "{{count}} second left",
+    "secondsLeft_other": "{{count}} seconds left",
+    "timeUp": "Time is up: the puzzle is failed.",
+    "gaveUp": "Given up: the puzzle is failed.",
+    "validAnyway": "Your correction was valid all the same; after a forfeit it earns nothing.",
+    "accepted": "Accepted: your flips and the errors cancel down to a stabilizer. The logical qubit is intact.",
+    "rejected": "Rejected: what is left is not a stabilizer. Either a defect remains or the logical qubit was flipped.",
+    "bonus": "Bonus: your correction has the decoder's weight.",
+    "noBonus": "No bonus: the decoder found a lighter correction (shown as chains).",
+    "decoderFailedAccepted": "The decoder fails this puzzle; your correction beats it. Its correction (the chains) leaves a logical error.",
+    "decoderFailedRejected": "The decoder fails this puzzle too: its correction (the chains) leaves a logical error.",
+    "flips": "Your flips: {{x}} X, {{z}} Z",
+    "mwpmFlips": "Decoder: {{x}} X, {{z}} Z",
+    "points": "+{{points}} points",
+    "best": "Best: {{best}}",
+    "streak": "Streak: {{streak}}",
+    "played": "Solved {{solved}} of {{played}}",
+    "share": "Share this puzzle",
+    "shareUrl": "Link to this puzzle",
+    "copy": "Copy link",
+    "copied": "Link copied.",
+    "copyFailed": "Could not copy; select the link and copy it by hand.",
+    "shareImage": "Share image",
+    "imageFailed": "The image could not be created in this browser; share the link instead.",
+    "imageName": "syndrome-d{{d}}.png",
+    "badLink": "This link does not describe a puzzle. Play a new one instead.",
+    "fromLink": "A puzzle from a link: it does not count towards your streak.",
+    "gridLabel": "Surface code, challenge",
+    "followUp": "Liked it?"
+  },
+  "spacetime": {
+    "title": "Space and time",
+    "intro": "The same code with measurement failures: the stabilizers are measured d times, cycle after cycle, and the decoder matches defects across time as well as space. One shot, cycle by cycle, in six steps.",
+    "model": "Measurement failures: each stabilizer measurement also fails with probability p; d cycles and a perfect final readout.",
+    "p": "Error probability p of the random shot",
+    "view": {
+      "label": "View",
+      "left": "From the left",
+      "right": "From the right"
+    },
+    "explode": "Spread the layers",
+    "cycle": "Cycle {{cycle}}",
+    "finalReadout": "Final readout",
+    "svgLabel": "Spacetime stack of the distance-{{d}} surface code: {{cycles}} noisy cycles and a perfect final readout",
+    "layerLabel": "Cycle {{cycle}}: {{defects}}, {{flips}}, {{errors}}",
+    "finalLayerLabel": "Final readout, its readings perfect: {{defects}}",
+    "count": {
+      "defects_one": "{{count}} defect",
+      "defects_other": "{{count}} defects",
+      "flips_one": "{{count}} measurement failure",
+      "flips_other": "{{count}} measurement failures",
+      "errors_one": "{{count}} new data error",
+      "errors_other": "{{count}} new data errors",
+      "finalDefects_zero": "no defects",
+      "finalDefects_one": "{{count}} defect, from a measurement failure in the last cycle",
+      "finalDefects_other": "{{count}} defects, each from a measurement failure in the last cycle"
+    },
+    "layersHeading": "Layer by layer",
+    "errors": "Errors",
+    "measurements": "Readings",
+    "detectors": "Detectors",
+    "matching": "Matching",
+    "correction": "Correction",
+    "verdict": "Verdict",
+    "explain": {
+      "errors": "Each cycle, noise hits some data qubits (a ring marks the new ones) and the errors compose from cycle to cycle: two equal ones on a qubit cancel. A cross on a plaquette is a measurement failure: that reading will come out wrong, but no qubit changes.",
+      "measurements": "Each cycle, every stabilizer is read. A filled plaquette read “changed”: the parity of the errors it detects, which a measurement failure inverts in that cycle only. One error alone keeps its neighbours lit from its cycle to the final readout; two equal errors side by side cancel on the stabilizer they share.",
+      "detectors": "The decoder compares each reading with the previous one: a reading that differs is a defect. A data error shows only in its cycle; a measurement failure shows twice, on the same stabilizer in consecutive layers (the second may be the final readout). The final readout is perfect.",
+      "matching": "The decoder pairs the defects with each other or with the boundary, within a cycle (space edges) and between cycles (time edges), so that the total weight of the paths, time edges included, is as small as possible: that can mean flipping more qubits than another pairing would.",
+      "correction": "Only the space edges correct anything, on the final plane after the last cycle: each qubit is flipped as many times as space edges cross it, so an even number leaves it unchanged. Time edges explain misreads and touch no qubit.",
+      "verdict": "What remains on the final plane is the accumulated error times the correction. A product of stabilizers means the logical qubit is intact; a logical operator means the information changed."
+    },
+    "prev": "Back",
+    "next": "Next",
+    "play": "Play",
+    "pause": "Pause",
+    "restart": "Repeat",
+    "newShot": "New random shot",
+    "preset": {
+      "label": "Presets",
+      "flip": "One measurement failure",
+      "data": "One data error",
+      "both": "Both"
+    },
+    "copy": "Copy link to this shot",
+    "copied": "Link copied.",
+    "copyFailed": "Could not copy; the link is in the address bar after you copy it by hand.",
+    "badLink": "This link does not describe a shot of the viewer.",
+    "fromLink": "A shot from a link.",
+    "largeDistance": "At this distance the stack is dense; d ≤ 7 reads better.",
+    "loading": "Loading the viewer…"
+  },
+  "explain": {
+    "challengeRule": {
+      "title": "What counts as correct?",
+      "body": "Any correction that leaves only a product of stabilizers is accepted: no defect left and the encoded information unchanged. It need not be the decoder's. The bonus needs the same number of X flips and the same number of Z flips as the decoder's correction."
+    },
+    "qubit": {
+      "title": "Data qubit",
+      "body": "A data qubit holds a share of the encoded information. Noise can flip it: X flips its bit, Z flips its phase, Y does both. Nobody reads the data qubits directly, which would disturb them; the code only asks the stabilizers around them."
+    },
+    "stabilizer": {
+      "title": "Stabilizer",
+      "body": "A stabilizer measures the joint parity of its 2 or 4 neighbouring data qubits. A Z stabilizer flips when an odd number of them carry an X component; an X stabilizer, when an odd number carry a Z component. A flipped stabilizer is a defect; the set of defects is the syndrome."
+    },
+    "matching": {
+      "title": "Matching",
+      "body": "The decoder pairs every defect with another defect or with the boundary of the code, and picks the pairing whose paths flip the fewest qubits in total: a minimum-weight perfect matching. The correction flips the qubits along those paths. Short error chains are likelier than long ones."
+    },
+    "distance": {
+      "title": "Distance",
+      "body": "The distance d is the size of the smallest error that changes the encoded information while leaving no defect at all: it has d flips, for example X along one full column or Z along one full row. Any error with at most (d − 1)/2 flips is always corrected; a larger one may fool the decoder."
+    },
+    "verdictRule": {
+      "title": "Why this verdict",
+      "body": "What is left is the error times the correction, with no defects. Count its X flips along any complete row and its Z flips along any complete column (a Y counts as both). Both counts even: a product of stabilizers, the logical qubit is intact. Either odd: a logical operator; the information changed unnoticed."
+    },
+    "measurementsPerfect": {
+      "title": "Perfect measurements",
+      "body": "Here every stabilizer is measured once and perfectly: the only noise is on the data qubits. Real hardware also misreads stabilizers, so the measurement is repeated over several cycles and the decoder matches defects in time as well as in space."
+    },
+    "yError": {
+      "title": "Y error",
+      "body": "Y = X·Z: a Y error is an X flip and a Z flip on the same qubit at once. The Z stabilizers around it see only its X part and the X stabilizers only its Z part, so the two parts are detected and corrected separately, as if they were two errors."
+    },
+    "threshold": {
+      "title": "Threshold",
+      "body": "Below a threshold a bigger code fails less often; above it, more often. Each pair of sizes crosses at its own p: between 9 and 10 % with perfect measurements, between 2 and 3 % with measurement failures (measured against PyMatching). Left of a crossing the bigger code wins (Λ > 1); right of it, it loses (Λ < 1)."
+    },
+    "lambda": {
+      "title": "Λ, the suppression factor",
+      "body": "Λ = P_L(d) / P_L(d + 2) at the chosen p: how many times fewer logical errors the next size makes. Λ > 1 means adding qubits helped; its interval combines the uncertainty of both rates. Willow (Google, 2024) measured Λ ≈ 2.14 per step, with a different noise model."
+    },
+    "logAxis": {
+      "title": "Why a log axis",
+      "body": "Each labelled line is ten times the one below. On a linear axis every rate under 5 % would sit on the floor, and the gap between d = 3 and d = 7 at low p, which is the whole message, would be invisible."
+    },
+    "upperBound": {
+      "title": "Open markers",
+      "body": "A point with no logical error yet in N shots is drawn as an open marker with an arrow at its upper bound, never as zero: with 95 % confidence the true rate is below about 4/N. More shots push the bound down until the first failure gives a measured point."
+    },
+    "phenomenological": {
+      "title": "Measurement failures",
+      "body": "Here each stabilizer measurement also fails with probability p, so it is repeated d times, closed by a perfect final readout. A misread shows as two defects on one stabilizer, a cycle apart; a data error shows once, in its cycle, on the stabilizers around it. The decoder matches defects in time as well as in space."
+    },
+    "measurementFlip": {
+      "title": "A measurement failure",
+      "body": "A measurement failure flips one stabilizer's reading in one cycle; the qubits do not change. As each detector compares a reading with the previous one, it shows as two defects on that stabilizer in consecutive layers (the second may be the final readout). The decoder joins them with a time edge and corrects no qubit."
+    },
+    "dataErrorPersists": {
+      "title": "A data error persists",
+      "body": "A data error stays on its qubit. From its cycle to the final readout, each neighbouring stabilizer reads the parity of the errors it detects: one error alone keeps it lit; a second equal error beside it, or a measurement failure, inverts that reading. The detector marks only the cycle in which the reading changed."
+    },
+    "finalPlane": {
+      "title": "The final plane",
+      "body": "The correction acts on the qubits after the last cycle: each qubit is flipped as many times as the chains' space edges cross it, from any cycle; an even number leaves it unchanged. Time edges flip no qubit. The final readout never fails, so each of its defects comes from a measurement failure in the last cycle."
+    }
+  }
+}

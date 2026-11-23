@@ -1,0 +1,86 @@
+{
+  "$comment": "Source of truth of the analytics taxonomy of seequant.app (brand site and Syndrome, one Umami website). Prose, costs and phase-3 questions: docs/analitica-eventos.md. Syndrome keeps a copy and records its version and sha256. Change = new semver + entry in docs/decisiones.md.",
+  "version": "1.0.0",
+  "date": "2026-10-19",
+  "rules": {
+    "nameCase": "snake_case",
+    "maxNameLength": 50,
+    "maxProps": 2,
+    "valuesFromClosedEnums": true,
+    "never": [
+      "email",
+      "free text",
+      "puzzle mask",
+      "full URL",
+      "any identifier of a person"
+    ]
+  },
+  "events": {
+    "tool_open": {
+      "emittedBy": ["web"],
+      "status": "active",
+      "props": {
+        "tool": ["syndrome"],
+        "from": ["home", "tools", "lab", "classroom", "about", "nav"]
+      }
+    },
+    "lang_switch": {
+      "emittedBy": ["web", "syndrome"],
+      "status": "active",
+      "props": {
+        "to": ["es", "en"]
+      }
+    },
+    "interest_open": {
+      "emittedBy": ["web", "syndrome"],
+      "status": "active",
+      "props": {
+        "role": ["teacher", "university", "company", "journalist", "other"],
+        "from": ["classroom", "syndrome_footer", "challenge_result"]
+      }
+    },
+    "interest_signup": {
+      "emittedBy": ["web"],
+      "status": "reserved",
+      "props": {
+        "role": ["teacher", "university", "company", "journalist", "other"]
+      }
+    },
+    "feedback_open": {
+      "emittedBy": ["web", "syndrome"],
+      "status": "active",
+      "props": {
+        "from": ["footer", "syndrome_footer", "challenge_result"]
+      }
+    },
+    "chart_engaged": {
+      "emittedBy": ["syndrome"],
+      "status": "active",
+      "props": {
+        "model": ["independent", "phenomenological"]
+      }
+    },
+    "challenge_completed": {
+      "emittedBy": ["syndrome"],
+      "status": "active",
+      "props": {
+        "d": ["3", "5", "7", "9"],
+        "result": ["optimal", "valid", "wrong"]
+      }
+    },
+    "challenge_shared": {
+      "emittedBy": ["syndrome"],
+      "status": "active",
+      "props": {
+        "method": ["link", "image"]
+      }
+    },
+    "app_language": {
+      "emittedBy": ["syndrome"],
+      "status": "active",
+      "props": {
+        "lang": ["es", "en"]
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+// Cloudflare deployment (docs/decisiones.md 2026-10-19; tasks/plans/path-routing.md):
+// the app lives at https://seequant.app/syndrome/, one Worker per SEEQuant app
+// bound to a route of the brand domain. `npm run deploy` = `npm run build`
+// (which leaves dist/ = syndrome/ + _headers, tools/deploy/stage.ts) +
+// `wrangler deploy`.
+//
+// Static assets are served first, from dist/ by full path (dist/syndrome/… is
+// /syndrome/…): no Worker strips a prefix, and dist/_headers applies to them.
+// Only what has no asset reaches edge/worker.ts: the legacy host (a 301 to the
+// new location, and a /sw.js that retires the old service worker), /syndrome
+// and every language directory without its slash, /syndrome/es
+// (`run_worker_first`, exact paths: no `*`; without it the asset server would
+// answer /syndrome/es with its own non-301 trailing-slash redirect,
+// tasks/plans/syndrome-es-url.md D8, H1), and missing paths (404). `not_found_handling: "none"`:
+// with "single-page-application" a navigation without an asset would be
+// answered with index.html before the Worker ever ran.
+//
+// Routes (the zone seequant.app is in the same account; a route needs the token
+// permission "Workers Routes: Edit" on that zone). The rest of seequant.app,
+// the root included, is the brand site's Worker (seequant.app/*, another repo):
+// the most specific pattern wins, so these routes must never take more than
+// the app's own paths (docs/decisiones.md 2026-10-20):
+//   - seequant.app/syndrome*  the app (also matches /syndrome and /syndromeX,
+//                             which the Worker redirects or answers 404);
+//   - syndrome.seequant.app   the old origin (custom domain), kept so that
+//                             links shared before the move keep working.
+//
+// First deploy in two phases: `npm run deploy -- --var LEGACY_STATUS:302`
+// (the old origin answers temporary redirects only, its service worker is left
+// alone) until the new location is measured; then `npm run deploy` (301 and the
+// retiring service worker).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "syndrome",
+  "compatibility_date": "2026-10-01",
+  "main": "edge/worker.ts",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "none",
+    "run_worker_first": ["/syndrome", "/syndrome/es"],
+  },
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [
+    { "pattern": "seequant.app/syndrome*", "zone_name": "seequant.app" },
+    { "pattern": "syndrome.seequant.app", "custom_domain": true },
+  ],
+}

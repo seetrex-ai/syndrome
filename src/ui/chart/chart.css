@@ -1,0 +1,348 @@
+/* Colours and strokes of the chart live here, not in TypeScript (tasks/plans/ui.md D4). */
+:root {
+  /* Strokes and fills (WCAG 1.4.11 asks ≥ 3:1 for graphics), measured by
+     tests/intent/theme-contrast against --bg (#ffffff / #101214), the figure's
+     background, and against --sub-threshold, the region the curves cross
+     (the first tint was 1.05:1 from the paper
+     and the curves had no margin on it). Light / dark on --bg: */
+  --curve-3: light-dark(#d4420c, #ffa94d); /* 4.58:1 / 9.86:1 */
+  --curve-5: light-dark(#28813a, #69db7c); /* 4.89:1 / 10.75:1 */
+  --curve-7: light-dark(#1971c2, #74c0fc); /* 5.02:1 / 9.55:1 */
+  /* Text in the curve's colour (the stats table, which sits on the card,
+     --surface, from 640 px) needs ≥ 4.5:1 (WCAG 1.4.3) on --bg AND on
+     --surface (#f1f2f4 / #181b20): darker in the light theme, the same tint
+     in the dark one (tests/intent/chart-conventions:
+     test_intent_chart_text_contrast measures both). Light on --bg / --surface: */
+  --curve-3-text: light-dark(#b0380a, #ffa94d); /* 6.15 / 5.49 */
+  --curve-5-text: light-dark(#1f6e32, #69db7c); /* 6.30 / 5.62 */
+  --curve-7-text: light-dark(#1865ad, #74c0fc); /* 5.99 / 5.35 */
+  --chart-axis: light-dark(#495057, #ced4da);
+  /* The gridlines cross the sub-threshold region: ≥ 1.3:1 on it (#dee2e6 was 1.07
+     on the light region, #343a40 1.25 on the dark one) and ≤ 1.8 on the
+     paper so they stay a grid, not a mark
+     (1.35 / 1.76 light, 1.35 / 1.76 dark; a ceiling of 1.6 is out of reach:
+     the region itself is ≥ 1.25 from the paper and 1.25 × 1.3 = 1.625). */
+  --chart-grid: light-dark(#c1c3c7, #393f46);
+  /* The user's p line: 4.61:1 on the paper and 3.53 on the region in light,
+     ≥ 6.9 in dark. */
+  --chart-user-p: light-dark(#6e767d, #adb5bd);
+  /* The sub-threshold region (design.md D5): a tint of the paper under the
+     gridlines and the curves, ≥ 1.25:1 from --bg so it can be seen (1.31 /
+     1.31); every curve (≥ 3.51), the user's p line and --fg keep their ratios
+     on it (tests/intent/theme-contrast). */
+  --sub-threshold: light-dark(#e8dfe2, #272a31);
+}
+
+/* Safari < 17.5 has no light-dark(): the light side, plain (theme-tokens test). */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    --curve-3: #d4420c;
+    --curve-5: #28813a;
+    --curve-7: #1971c2;
+    --curve-3-text: #b0380a;
+    --curve-5-text: #1f6e32;
+    --curve-7-text: #1865ad;
+    --chart-axis: #495057;
+    --chart-grid: #c1c3c7;
+    --chart-user-p: #6e767d;
+    --sub-threshold: #e8dfe2;
+  }
+}
+
+/* The sub-threshold region and the crossing markers (D5): the region is the
+   first child of the svg, under the gridlines and the curves (painted
+   above the gridlines it hid them). */
+.chart__region {
+  fill: var(--sub-threshold);
+}
+
+.chart__crossing {
+  fill: var(--bg);
+  stroke: var(--fg);
+  stroke-width: 1.5;
+}
+
+.curve--d3 {
+  --curve: var(--curve-3);
+  --curve-text: var(--curve-3-text);
+}
+
+.curve--d5 {
+  --curve: var(--curve-5);
+  --curve-text: var(--curve-5-text);
+}
+
+.curve--d7 {
+  --curve: var(--curve-7);
+  --curve-text: var(--curve-7-text);
+}
+
+/* The noise model selector (phase2.md D10): a full-width segmented control
+   (controls.css, .segmented--fill) with its legend above the segments. */
+.model-select {
+  margin: 0 0 1rem;
+}
+
+/* The figure sits on --bg inside the card (design.md §2 B; the curves were
+   pinned against --bg but painted on --surface): the
+   plot, its legend and the model line share the paper, with the card's
+   radius. On a phone the panel is not a card and the figure is flush. */
+.chart {
+  margin: 0;
+  background: var(--bg);
+  border-radius: var(--radius-card);
+}
+
+@media (min-width: 640px) {
+  .chart {
+    padding: 0.75rem 0.75rem 0.625rem;
+  }
+}
+
+.chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-size: 12px;
+}
+
+.chart__gridline {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+
+.chart__gridline--minor {
+  stroke-dasharray: 2 4;
+  opacity: 0.6;
+}
+
+.chart__axis line,
+line.chart__axis {
+  stroke: var(--chart-axis);
+  stroke-width: 1.5;
+}
+
+.chart__axis text {
+  fill: currentColor;
+}
+
+.chart__axis--y text {
+  text-anchor: end;
+}
+
+.chart__axis--x text {
+  text-anchor: middle;
+}
+
+/* Both axis titles centred on their axis. `.chart__axis` in the selector so
+   it outranks `.chart__axis--y text` above (2026-10-20, fix/small-phones: the
+   y title took `end` from that rule and hung below the axis's middle, its
+   start under the first screen's fold on a phone). */
+.chart__axis .chart__axis-label {
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.chart__user-p {
+  stroke: var(--chart-user-p);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.curve__line {
+  fill: none;
+  stroke: var(--curve);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.marker__dot {
+  fill: var(--curve);
+  stroke: none;
+}
+
+.marker__bar {
+  stroke: var(--curve);
+  stroke-width: 1.5;
+}
+
+/* The upper bound: the distance's shape, hollow. */
+.marker__open {
+  fill: none;
+  stroke: var(--curve);
+  stroke-width: 1.5;
+}
+
+.marker__arrow {
+  fill: none;
+  stroke: var(--curve);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.chart__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chart__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* The legend's key: a line segment with the curve's
+   marker shape on it, in the curve's colour, so the legend names the shape
+   the plot uses. Sized by its width/height attributes (28 × 12 CSS px). */
+.chart__swatch {
+  flex: 0 0 auto;
+  display: block;
+  overflow: visible;
+}
+
+.chart__swatch-line {
+  stroke: var(--curve);
+  stroke-width: 2;
+}
+
+.chart__swatch-mark {
+  fill: var(--curve);
+  stroke: none;
+}
+
+.chart__model {
+  margin: 0;
+  color: var(--muted);
+}
+
+.chart__status {
+  margin: 0.75rem 0 0.25rem;
+}
+
+.chart__stats {
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.chart__stats th,
+.chart__stats td {
+  padding: 0.125rem 1rem 0.125rem 0;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart__stats th {
+  color: var(--curve-text);
+  /* "d = 3" is one token: a narrow table wraps its counts, never the label. */
+  white-space: nowrap;
+}
+
+/* Λ as stat tiles (design.md D1): one card per pair of distances, the label
+   on top, the big figure (the aria-hidden dd ChartPanel adds), the dd with
+   the interval under it. The DOM order keeps `[data-lambda-d] dd` as the
+   spelled-out value; `order` only arranges the paint. */
+.chart__lambda {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+}
+
+.chart__lambda > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+  padding: 0.875rem 1rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--bg);
+}
+
+.chart__lambda dt {
+  order: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.chart__lambda dd {
+  order: 2;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart__lambda dd.chart__ratio {
+  order: 1;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.chart__ratio:empty {
+  display: none;
+}
+
+/* The first figure (design.md D1, ≥ 960 px): the grid container, the title
+   and the figure are placed by index.css (the skeleton shows before this
+   sheet loads); the rest of the panel's children here. */
+@media (min-width: 960px) {
+  .panel--hero > .model-select {
+    grid-area: model;
+  }
+
+  .panel--hero > .chart__status {
+    grid-area: status;
+  }
+
+  .panel--hero > .chart__stats {
+    grid-area: stats;
+  }
+
+  .panel--hero > .chart__lambda {
+    grid-area: lambda;
+    grid-template-columns: 1fr;
+    margin-top: 0;
+  }
+
+  .panel--hero > .chart__base {
+    grid-area: base;
+  }
+
+  .panel--hero > .explain-group {
+    grid-area: explain;
+  }
+}
+
+.chart__base {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* The skeleton's empty axes step back by colour (the grid token), never by
+   `opacity` on the svg, which also carries the axis text once loaded
+   (tests/intent/theme-contrast). */
+.chart--skeleton .chart__axis {
+  stroke: var(--chart-grid);
+}

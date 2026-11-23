@@ -1,0 +1,17 @@
+# Cloudflare Workers static assets (wrangler.jsonc): per-path headers, copied to
+# dist/_headers by tools/deploy/stage.ts (the app itself is built into
+# dist/syndrome/, so every path here is under /syndrome/). The service worker and
+# the manifest are unhashed files that change on every build. Browsers already
+# bypass the HTTP cache for the service worker script itself on an update check
+# (`updateViaCache: "imports"` by default), so `no-cache` on sw.js is belt and
+# braces; the manifest has no such rule and needs it. No Service-Worker-Allowed:
+# the worker's scope is its own directory, /syndrome/, and must never reach the
+# brand site at the root (docs/decisiones.md 2026-10-19). Hashed files under
+# /syndrome/assets/ are immutable by name.
+/syndrome/sw.js
+  Cache-Control: no-cache
+/syndrome/manifest.webmanifest
+  Cache-Control: no-cache
+  Content-Type: application/manifest+json
+/syndrome/assets/*
+  Cache-Control: public, max-age=31536000, immutable

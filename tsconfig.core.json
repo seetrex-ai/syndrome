@@ -1,0 +1,30 @@
+{
+  // src/core is pure TypeScript: it compiles with no DOM lib and no ambient
+  // types, so any browser global or DOM type (window, location, HTMLElement...)
+  // is TS2304 here even if the app project (which has the DOM lib) accepts it.
+  // Package imports (React, i18next) are stopped by ESLint and by
+  // tests/intent/core-purity.test.ts, not by this file. docs/spec.md §2, rule 2.
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.core.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023"],
+    "types": [],
+    "skipLibCheck": true,
+
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src/core"]
+}

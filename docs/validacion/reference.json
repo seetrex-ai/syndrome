@@ -1,0 +1,658 @@
+{
+ "schema": 1,
+ "generator": "tools/reference/run.py",
+ "engine": {
+  "name": "pymatching",
+  "version": "2.4.0",
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "batchShots": "100000"
+ },
+ "noise": "independent",
+ "stopRule": {
+  "minFailures": 100,
+  "minShots": 100000,
+  "maxShots": 1000000
+ },
+ "seed": 20261016,
+ "weights": {
+  "seed": "0x53594E44",
+  "scale": 16760454,
+  "epsilonDenominator": 1000,
+  "maxEdgeWeight": 16777215,
+  "sample": {
+   "0": 16766926,
+   "1": 16771381,
+   "2": 16773715,
+   "8": 16766194,
+   "24": 16762760,
+   "48": 16772826,
+   "80": 16763322,
+   "120": 16774950
+  }
+ },
+ "geometry": {
+  "3": [
+   [
+    "Z",
+    0,
+    0
+   ],
+   [
+    "Z",
+    0,
+    2
+   ],
+   [
+    "Z",
+    1,
+    -1
+   ],
+   [
+    "Z",
+    1,
+    1
+   ],
+   [
+    "X",
+    -1,
+    0
+   ],
+   [
+    "X",
+    0,
+    1
+   ],
+   [
+    "X",
+    1,
+    0
+   ],
+   [
+    "X",
+    2,
+    1
+   ]
+  ],
+  "5": [
+   [
+    "Z",
+    0,
+    0
+   ],
+   [
+    "Z",
+    0,
+    2
+   ],
+   [
+    "Z",
+    0,
+    4
+   ],
+   [
+    "Z",
+    1,
+    -1
+   ],
+   [
+    "Z",
+    1,
+    1
+   ],
+   [
+    "Z",
+    1,
+    3
+   ],
+   [
+    "Z",
+    2,
+    0
+   ],
+   [
+    "Z",
+    2,
+    2
+   ],
+   [
+    "Z",
+    2,
+    4
+   ],
+   [
+    "Z",
+    3,
+    -1
+   ],
+   [
+    "Z",
+    3,
+    1
+   ],
+   [
+    "Z",
+    3,
+    3
+   ],
+   [
+    "X",
+    -1,
+    0
+   ],
+   [
+    "X",
+    -1,
+    2
+   ],
+   [
+    "X",
+    0,
+    1
+   ],
+   [
+    "X",
+    0,
+    3
+   ],
+   [
+    "X",
+    1,
+    0
+   ],
+   [
+    "X",
+    1,
+    2
+   ],
+   [
+    "X",
+    2,
+    1
+   ],
+   [
+    "X",
+    2,
+    3
+   ],
+   [
+    "X",
+    3,
+    0
+   ],
+   [
+    "X",
+    3,
+    2
+   ],
+   [
+    "X",
+    4,
+    1
+   ],
+   [
+    "X",
+    4,
+    3
+   ]
+  ]
+ },
+ "points": [
+  {
+   "d": 3,
+   "p": 0.03,
+   "shots": 100000,
+   "failures": 2859,
+   "failuresX": 1447,
+   "failuresZ": 1431,
+   "estimate": 0.02859,
+   "low": 0.02757507377656684,
+   "high": 0.029641142874238708,
+   "estimateX": 0.01447,
+   "lowX": 0.01374828417669992,
+   "highX": 0.015229017260404971,
+   "estimateZ": 0.01431,
+   "lowZ": 0.013592332457695026,
+   "highZ": 0.015064981271605889,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.05,
+   "shots": 100000,
+   "failures": 7122,
+   "failuresX": 3668,
+   "failuresZ": 3570,
+   "estimate": 0.07122,
+   "low": 0.0696423532193971,
+   "high": 0.07283058832942962,
+   "estimateX": 0.03668,
+   "lowX": 0.035532624674569774,
+   "highX": 0.03786297045207418,
+   "estimateZ": 0.0357,
+   "lowZ": 0.03456774430480462,
+   "highZ": 0.036867926111539995,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.07,
+   "shots": 100000,
+   "failures": 12832,
+   "failuresX": 6663,
+   "failuresZ": 6600,
+   "estimate": 0.12832,
+   "low": 0.12626138971913087,
+   "high": 0.13040716505223882,
+   "estimateX": 0.06663,
+   "lowX": 0.06510094155007344,
+   "highX": 0.06819235263112679,
+   "estimateZ": 0.066,
+   "lowZ": 0.06447777043505262,
+   "highZ": 0.06755557214666946,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.09,
+   "shots": 100000,
+   "failures": 19171,
+   "failuresX": 10111,
+   "failuresZ": 10089,
+   "estimate": 0.19171,
+   "low": 0.1892820613377625,
+   "high": 0.19416162341919393,
+   "estimateX": 0.10111,
+   "lowX": 0.0992567727864519,
+   "highX": 0.10299387242650462,
+   "estimateZ": 0.10089,
+   "lowZ": 0.09903858659629555,
+   "highZ": 0.10277207551843048,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.1,
+   "shots": 100000,
+   "failures": 22355,
+   "failuresX": 11906,
+   "failuresZ": 11903,
+   "estimate": 0.22355,
+   "low": 0.220978433398527,
+   "high": 0.2261428052114202,
+   "estimateX": 0.11906,
+   "lowX": 0.11706735569456532,
+   "highX": 0.12108191048764948,
+   "estimateZ": 0.11903,
+   "lowZ": 0.11703757555966565,
+   "highZ": 0.12105169292733589,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.11,
+   "shots": 100000,
+   "failures": 25782,
+   "failuresX": 13848,
+   "failuresZ": 13856,
+   "estimate": 0.25782,
+   "low": 0.25511814236686686,
+   "high": 0.26054046340834397,
+   "estimateX": 0.13848,
+   "lowX": 0.13635309203496304,
+   "highX": 0.14063468218195896,
+   "estimateZ": 0.13856,
+   "lowZ": 0.13643257015069518,
+   "highZ": 0.1407151979201288,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.13,
+   "shots": 100000,
+   "failures": 32163,
+   "failuresX": 17545,
+   "failuresZ": 17730,
+   "estimate": 0.32163,
+   "low": 0.318741825149575,
+   "high": 0.324531878344208,
+   "estimateX": 0.17545,
+   "lowX": 0.17310507930891986,
+   "highX": 0.17781985464245778,
+   "estimateZ": 0.1773,
+   "lowZ": 0.17494527293495835,
+   "highZ": 0.17967951888790276,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 3,
+   "p": 0.15,
+   "shots": 100000,
+   "failures": 38709,
+   "failuresX": 21745,
+   "failuresZ": 21696,
+   "estimate": 0.38709,
+   "low": 0.3840754664200409,
+   "high": 0.39011320802904265,
+   "estimateX": 0.21745,
+   "lowX": 0.2149041557127323,
+   "highX": 0.22001755153718838,
+   "estimateZ": 0.21696,
+   "lowZ": 0.21441625724194277,
+   "highZ": 0.21952548765282823,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.03,
+   "shots": 100000,
+   "failures": 1310,
+   "failuresX": 659,
+   "failuresZ": 656,
+   "estimate": 0.0131,
+   "low": 0.012413742696193988,
+   "high": 0.013823663992839378,
+   "estimateX": 0.00659,
+   "lowX": 0.006107123327769415,
+   "highX": 0.007110783499989783,
+   "estimateZ": 0.00656,
+   "lowZ": 0.00607825881074305,
+   "highZ": 0.007079650321802902,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.05,
+   "shots": 100000,
+   "failures": 4856,
+   "failuresX": 2491,
+   "failuresZ": 2421,
+   "estimate": 0.04856,
+   "low": 0.04724502724424753,
+   "high": 0.04990965518684145,
+   "estimateX": 0.02491,
+   "lowX": 0.023962139941390875,
+   "highX": 0.025894359429923283,
+   "estimateZ": 0.02421,
+   "lowZ": 0.023275490849826226,
+   "highZ": 0.02518106229984555,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.07,
+   "shots": 100000,
+   "failures": 11077,
+   "failuresX": 5617,
+   "failuresZ": 5741,
+   "estimate": 0.11077,
+   "low": 0.10883972265195523,
+   "high": 0.11273018041966616,
+   "estimateX": 0.05617,
+   "lowX": 0.05475989817034231,
+   "highX": 0.057614199613173156,
+   "estimateZ": 0.05741,
+   "lowZ": 0.055985134501677504,
+   "highZ": 0.05886886801731877,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.09,
+   "shots": 100000,
+   "failures": 19025,
+   "failuresX": 9971,
+   "failuresZ": 10011,
+   "estimate": 0.19025,
+   "low": 0.18782923094805862,
+   "high": 0.1926945659751866,
+   "estimateX": 0.09971,
+   "lowX": 0.0978683622510657,
+   "highX": 0.10158239051860603,
+   "estimateZ": 0.10011,
+   "lowZ": 0.0982650395466983,
+   "highZ": 0.10198568249248338,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.1,
+   "shots": 100000,
+   "failures": 23580,
+   "failuresX": 12651,
+   "failuresZ": 12510,
+   "estimate": 0.2358,
+   "low": 0.2331791635891277,
+   "high": 0.23844113389956118,
+   "estimateX": 0.12651,
+   "lowX": 0.1244639937187074,
+   "highX": 0.12858470010812992,
+   "estimateZ": 0.1251,
+   "lowZ": 0.12306390792081764,
+   "highZ": 0.1271648942309971,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.11,
+   "shots": 100000,
+   "failures": 27824,
+   "failuresX": 15118,
+   "failuresZ": 15003,
+   "estimate": 0.27824,
+   "low": 0.2754710574284646,
+   "high": 0.2810259795552283,
+   "estimateX": 0.15118,
+   "lowX": 0.148973145416279,
+   "highX": 0.15341365310758345,
+   "estimateZ": 0.15003,
+   "lowZ": 0.1478301519466894,
+   "highZ": 0.15225673492733197,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.13,
+   "shots": 100000,
+   "failures": 36817,
+   "failuresX": 20547,
+   "failuresZ": 20507,
+   "estimate": 0.36817,
+   "low": 0.365185797102784,
+   "high": 0.3711643308984798,
+   "estimateX": 0.20547,
+   "lowX": 0.202977087686825,
+   "highX": 0.20798553994127322,
+   "estimateZ": 0.20507,
+   "lowZ": 0.20257891201845746,
+   "highZ": 0.20758374634013077,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 5,
+   "p": 0.15,
+   "shots": 100000,
+   "failures": 44844,
+   "failuresX": 25593,
+   "failuresZ": 25729,
+   "estimate": 0.44844,
+   "low": 0.445359584862581,
+   "high": 0.4515243762975887,
+   "estimateX": 0.25593,
+   "lowX": 0.2532347330730866,
+   "highX": 0.2586440179036898,
+   "estimateZ": 0.25729,
+   "lowZ": 0.25458998386262494,
+   "highZ": 0.2600086626304852,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.03,
+   "shots": 100000,
+   "failures": 539,
+   "failuresX": 252,
+   "failuresZ": 288,
+   "estimate": 0.00539,
+   "low": 0.0049548060743912145,
+   "high": 0.005863192944838181,
+   "estimateX": 0.00252,
+   "lowX": 0.0022277863095763618,
+   "highX": 0.00285043320091926,
+   "estimateZ": 0.00288,
+   "lowZ": 0.002566416193258059,
+   "highZ": 0.003231775659796503,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.05,
+   "shots": 100000,
+   "failures": 3141,
+   "failuresX": 1627,
+   "failuresZ": 1547,
+   "estimate": 0.03141,
+   "low": 0.03034680531560197,
+   "high": 0.032509194685248606,
+   "estimateX": 0.01627,
+   "lowX": 0.015504261378713727,
+   "highX": 0.017072901771185867,
+   "estimateZ": 0.01547,
+   "lowZ": 0.014723495184406594,
+   "highZ": 0.01625372942647313,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.07,
+   "shots": 100000,
+   "failures": 9367,
+   "failuresX": 4840,
+   "failuresZ": 4735,
+   "estimate": 0.09367,
+   "low": 0.0918796846526595,
+   "high": 0.09549153214741227,
+   "estimateX": 0.0484,
+   "lowX": 0.04708711784800114,
+   "highX": 0.049747576875283875,
+   "estimateZ": 0.04735,
+   "lowZ": 0.046050937867254546,
+   "highZ": 0.04868383752356689,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.09,
+   "shots": 100000,
+   "failures": 18242,
+   "failuresX": 9659,
+   "failuresZ": 9529,
+   "estimate": 0.18242,
+   "low": 0.1800386258605985,
+   "high": 0.18482577261198974,
+   "estimateX": 0.09659,
+   "lowX": 0.0947745995618694,
+   "highX": 0.09843639290562486,
+   "estimateZ": 0.09529,
+   "lowZ": 0.09348570303267523,
+   "highZ": 0.09712538930891176,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.1,
+   "shots": 100000,
+   "failures": 23745,
+   "failuresX": 12592,
+   "failuresZ": 12722,
+   "estimate": 0.23745,
+   "low": 0.23482276325853982,
+   "high": 0.24009740746687755,
+   "estimateX": 0.12592,
+   "lowX": 0.1238781319429451,
+   "highX": 0.12799060721136502,
+   "estimateZ": 0.12722,
+   "lowZ": 0.12516903327785056,
+   "highZ": 0.12929960600236684,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.11,
+   "shots": 100000,
+   "failures": 29205,
+   "failuresX": 15929,
+   "failuresZ": 15842,
+   "estimate": 0.29205,
+   "low": 0.28923979071985495,
+   "high": 0.2948761852936683,
+   "estimateX": 0.15929,
+   "lowX": 0.15703497653390108,
+   "highX": 0.16157119892927524,
+   "estimateZ": 0.15842,
+   "lowZ": 0.15617004193163359,
+   "highZ": 0.16069620037035864,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.13,
+   "shots": 100000,
+   "failures": 40128,
+   "failuresX": 22650,
+   "failuresZ": 22679,
+   "estimate": 0.40128,
+   "low": 0.3982458763732253,
+   "high": 0.4043217079117233,
+   "estimateX": 0.2265,
+   "lowX": 0.22391628138714953,
+   "highX": 0.2291047305854334,
+   "estimateZ": 0.22679,
+   "lowZ": 0.22420509675017405,
+   "highZ": 0.22939589294280358,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  },
+  {
+   "d": 7,
+   "p": 0.15,
+   "shots": 100000,
+   "failures": 49690,
+   "failuresX": 29182,
+   "failuresZ": 29082,
+   "estimate": 0.4969,
+   "low": 0.4938012629997818,
+   "high": 0.49999897516151637,
+   "estimateX": 0.29182,
+   "lowX": 0.28901045188668095,
+   "highX": 0.2946455417968743,
+   "estimateZ": 0.29082,
+   "lowZ": 0.2880133366754388,
+   "highZ": 0.2936427338343416,
+   "stopReason": "shots",
+   "upperBoundOnly": false
+  }
+ ]
+}

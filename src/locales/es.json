@@ -1,0 +1,335 @@
+{
+  "a11y": {
+    "showMore": "Mostrar más",
+    "showLess": "Mostrar menos",
+    "sectionNav": "Secciones"
+  },
+  "app": {
+    "title": "Syndrome",
+    "tagline": "Más cúbits, menos errores.",
+    "byline": "Syndrome by SEEQuant"
+  },
+  "siteNav": {
+    "brand": "SEEQuant",
+    "label": "Principal",
+    "menu": "Menú",
+    "products": "Productos",
+    "productsPanel": {
+      "tagline": "Corrección cuántica de errores",
+      "openApp": "Abrir la app",
+      "syndromeChart": "Qué dice la gráfica",
+      "syndromeMethod": "Cómo lo comprobamos",
+      "all": "Todos los productos"
+    },
+    "nav": {
+      "lab": "Laboratorio",
+      "classroom": "Aula",
+      "about": "Sobre SEEQuant"
+    }
+  },
+  "meta": {
+    "title": "Syndrome: simulador de corrección cuántica de errores · SEEQuant",
+    "description": "Juega con el código de superficie: con el ruido por debajo del umbral, la tasa de error lógico baja al añadir cúbits. Gratis y en el navegador.",
+    "about": "Syndrome es un simulador interactivo de corrección cuántica de errores con el código de superficie rotado. Inyecta errores, mira cómo los corrige el decodificador y descubre por qué añadir cúbits reduce la tasa de error lógico cuando el hardware está por debajo del umbral."
+  },
+  "footer": {
+    "links": "Más",
+    "feedback": "Danos tu opinión",
+    "interest": "¿Lo usarías para enseñar? Cuéntanoslo",
+    "mailSubject": {
+      "feedback": "Opinión sobre Syndrome",
+      "interest": "Interés en Syndrome"
+    },
+    "brandNav": "Web de SEEQuant",
+    "brand": {
+      "home": "SEEQuant",
+      "products": "Productos",
+      "lab": "Laboratorio",
+      "privacy": "Privacidad",
+      "terms": "Términos"
+    }
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "English",
+    "es": "Español",
+    "code": {
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "theme": {
+    "label": "Tema",
+    "auto": "Automático",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "pwa": {
+    "offlineReady": "Syndrome ya funciona sin conexión.",
+    "updateAvailable": "Hay una versión nueva.",
+    "reload": "Recargar",
+    "close": "Cerrar"
+  },
+  "grid": {
+    "title": "Código de superficie",
+    "hint": "Toca un cúbit para un error X; mantenlo pulsado (o Mayús+clic, Mayús+Intro) para un error Z. Los dos juntos forman una Y.",
+    "distance": "Distancia",
+    "clear": "Limpiar",
+    "random": "Errores aleatorios",
+    "p": "Probabilidad de error",
+    "verdict": {
+      "ok": "Corregido: lo que queda de error y corrección es un estabilizador; el cúbit lógico está intacto.",
+      "x": "Error lógico X: error y corrección juntos voltean el cúbit lógico (volteo de bit).",
+      "z": "Error lógico Z: error y corrección juntos cambian la fase del cúbit lógico.",
+      "xz": "Error lógico Y: un volteo de bit y un cambio de fase del cúbit lógico a la vez."
+    },
+    "qubit": "Cúbit ({{row}}, {{col}}), error {{pauli}}",
+    "qubitNoError": "Cúbit ({{row}}, {{col}}), sin error",
+    "qubitHidden": "Cúbit ({{row}}, {{col}})",
+    "plaquette": "Estabilizador {{type}} ({{row}}, {{col}})",
+    "legend": {
+      "zPlaquette": "Estabilizador Z (detecta errores X)",
+      "xPlaquette": "Estabilizador X (detecta errores Z)",
+      "defect": "Defecto: un estabilizador volteado",
+      "chain": "Cadena de corrección"
+    }
+  },
+  "steps": {
+    "title": "Paso a paso",
+    "intro": "Una tirada aleatoria, repetida despacio: qué hizo el ruido, qué vio el código, qué decidió el decodificador y si acertó.",
+    "measurementsPerfect": "Mediciones perfectas, un ciclo.",
+    "errors": "Errores",
+    "defects": "Defectos",
+    "matching": "Emparejamiento",
+    "correction": "Corrección",
+    "verdict": "Veredicto",
+    "explain": {
+      "errors": "El ruido golpea algunos cúbits de datos: X voltea un bit, Z cambia una fase, Y hace las dos cosas. Nadie puede mirar los cúbits directamente sin perturbar la información codificada.",
+      "defects": "Cada estabilizador mide la paridad conjunta de sus cúbits vecinos: los estabilizadores Z detectan errores X y los X detectan errores Z. Un estabilizador cuyo resultado cambió es un defecto, y el conjunto de defectos es el síndrome. Una cadena de errores sólo se ve en sus extremos; si llega a un borde de su tipo, sólo se ve uno, y si va de un borde al borde opuesto de su tipo no se ve ninguno.",
+      "matching": "El decodificador empareja los defectos entre sí, o con el borde, de modo que la longitud total de los caminos que los unen sea la mínima posible: un emparejamiento perfecto de peso mínimo. Las cadenas de errores cortas son más probables que las largas.",
+      "correction": "A lo largo de cada pareja el decodificador aplica volteos del mismo tipo (un segundo volteo deshace el primero). Así desaparecen todos los defectos, pero la corrección no tiene por qué ser la cadena que hizo el ruido: sólo se conocen sus extremos.",
+      "verdict": "Lo que queda es el error por la corrección, ya sin defectos. Cuenta sus volteos X a lo largo de una fila completa cualquiera y sus volteos Z a lo largo de una columna completa (una Y cuenta como ambos): las dos cuentas pares es un producto de estabilizadores y el cúbit lógico está intacto; cualquiera de las dos impar es un operador lógico: la información cambió y ninguna medición lo notó."
+    },
+    "prev": "Atrás",
+    "next": "Siguiente",
+    "play": "Reproducir",
+    "pause": "Pausa",
+    "restart": "Repetir",
+    "newShot": "Nueva tirada aleatoria",
+    "gridLabel": "Código de superficie, paso a paso"
+  },
+  "chart": {
+    "title": "Tasa de error lógico",
+    "model": {
+      "independent": "Modelo de ruido: errores X y Z independientes, cada uno con probabilidad p por cúbit de datos; mediciones perfectas, un ciclo.",
+      "phenomenological": "Modelo de ruido: errores X y Z independientes, cada uno con probabilidad p por cúbit de datos y ciclo, y fallos de medición con probabilidad p; d ciclos, lectura final perfecta."
+    },
+    "modelSelect": {
+      "label": "Modelo de ruido",
+      "independent": "Mediciones perfectas",
+      "phenomenological": "Fallos de medición"
+    },
+    "axis": {
+      "p": "Probabilidad de error físico p",
+      "pl": "Tasa de error lógico P_L"
+    },
+    "loading": "Cargando la gráfica…",
+    "legend": {
+      "d": "d = {{d}}"
+    },
+    "shots_one": "{{count, number}} tirada en vivo",
+    "shots_many": "{{count, number}} tiradas en vivo",
+    "shots_other": "{{count, number}} tiradas en vivo",
+    "throughput": "{{rate, number}} tiradas/s",
+    "lambda": {
+      "label": "Λ = P_L(d = {{d}}) / P_L(d = {{next}}) en p = {{p}}",
+      "value": "{{ratio}} (intervalo del 95 %: de {{low}} a {{high}})",
+      "undefined": "No definido: los dos puntos necesitan al menos un error lógico.",
+      "noNoise": "No definido en p = 0: sin ruido ninguna tirada falla, así que no hay tasa de error lógico que comparar."
+    },
+    "upperBound": "Cota superior: todavía no se ha visto ningún error lógico en este punto.",
+    "running": "Simulando en segundo plano: las curvas base validadas se refinan con las tiradas en vivo.",
+    "done": "Simulación terminada en {{seconds}} s.",
+    "error": "La simulación se detuvo con un error: {{message}}",
+    "unavailable": "Este navegador no puede ejecutar la simulación; las curvas mostradas son la base validada.",
+    "workerLost": "El motor de simulación de esta versión ya no está; recarga la página para actualizar. Las curvas mostradas son la base validada.",
+    "base": "Base: {{shots, number}} tiradas validadas por punto, comparadas con PyMatching.",
+    "baseRange": "Base: de {{min, number}} a {{max, number}} tiradas validadas por punto, comparadas con PyMatching.",
+    "svgLabel": "{{pl}} frente a {{p}}. {{model}}"
+  },
+  "challenge": {
+    "title": "Reto: tú eres el decodificador",
+    "intro": "El código te enseña sus defectos, no sus errores. Dibuja una corrección que elimine todos los defectos sin voltear el cúbit lógico, contra reloj.",
+    "hint": "Toca un cúbit para añadir un giro X; mantenlo pulsado (o Mayús+clic) para un giro Z. Se acepta cualquier corrección que deje sólo un estabilizador: no tiene que ser la del decodificador.",
+    "start": "Nuevo puzle",
+    "submit": "Enviar",
+    "giveUp": "Rendirse",
+    "next": "Siguiente puzle",
+    "playNew": "Jugar un puzle nuevo",
+    "begin": "Empezar",
+    "readyHint": "Un puzle para ti. Pulsa Empezar cuando estés listo: el reloj arranca entonces.",
+    "timeLeft": "Tiempo restante: {{seconds}} s",
+    "secondsLeft_one": "Queda {{count}} segundo",
+    "secondsLeft_many": "Quedan {{count}} segundos",
+    "secondsLeft_other": "Quedan {{count}} segundos",
+    "timeUp": "Se acabó el tiempo: puzle fallado.",
+    "gaveUp": "Te has rendido: puzle fallado.",
+    "validAnyway": "Tu corrección era válida de todos modos; tras rendirte o agotar el tiempo no puntúa.",
+    "accepted": "Aceptada: tus giros y los errores se cancelan hasta un estabilizador. El cúbit lógico está intacto.",
+    "rejected": "Rechazada: lo que queda no es un estabilizador. O queda un defecto o el cúbit lógico se ha volteado.",
+    "bonus": "Bonificación: tu corrección tiene el peso del decodificador.",
+    "noBonus": "Sin bonificación: el decodificador encontró una corrección más ligera (las cadenas).",
+    "decoderFailedAccepted": "El decodificador falla en este puzle; tu corrección lo supera. La suya (las cadenas) deja un error lógico.",
+    "decoderFailedRejected": "El decodificador también falla en este puzle: su corrección (las cadenas) deja un error lógico.",
+    "flips": "Tus giros: {{x}} X, {{z}} Z",
+    "mwpmFlips": "Decodificador: {{x}} X, {{z}} Z",
+    "points": "+{{points}} puntos",
+    "best": "Mejor: {{best}}",
+    "streak": "Racha: {{streak}}",
+    "played": "Resueltos {{solved}} de {{played}}",
+    "share": "Comparte este puzle",
+    "shareUrl": "Enlace a este puzle",
+    "copy": "Copiar enlace",
+    "copied": "Enlace copiado.",
+    "copyFailed": "No se pudo copiar; selecciona el enlace y cópialo a mano.",
+    "shareImage": "Compartir imagen",
+    "imageFailed": "No se pudo crear la imagen en este navegador; comparte el enlace.",
+    "imageName": "syndrome-d{{d}}.png",
+    "badLink": "Este enlace no describe un puzle. Juega uno nuevo.",
+    "fromLink": "Un puzle recibido por enlace: no cuenta para tu racha.",
+    "gridLabel": "Código de superficie, reto",
+    "followUp": "¿Te ha gustado?"
+  },
+  "spacetime": {
+    "title": "Espacio y tiempo",
+    "intro": "El mismo código con fallos de medición: los estabilizadores se miden d veces, ciclo tras ciclo, y el decodificador empareja defectos también a través del tiempo. Una tirada, ciclo a ciclo, en seis pasos.",
+    "model": "Fallos de medición: cada medición de estabilizador también falla con probabilidad p; d ciclos y una lectura final perfecta.",
+    "p": "Probabilidad de error p de la tirada aleatoria",
+    "view": {
+      "label": "Vista",
+      "left": "Desde la izquierda",
+      "right": "Desde la derecha"
+    },
+    "explode": "Separar las capas",
+    "cycle": "Ciclo {{cycle}}",
+    "finalReadout": "Lectura final",
+    "svgLabel": "Pila espacio-temporal del código de superficie de distancia {{d}}: {{cycles}} ciclos con ruido y una lectura final perfecta",
+    "layerLabel": "Ciclo {{cycle}}: {{defects}}, {{flips}}, {{errors}}",
+    "finalLayerLabel": "Lectura final, sin fallos de lectura: {{defects}}",
+    "count": {
+      "defects_one": "{{count}} defecto",
+      "defects_many": "{{count}} defectos",
+      "defects_other": "{{count}} defectos",
+      "flips_one": "{{count}} fallo de medición",
+      "flips_many": "{{count}} fallos de medición",
+      "flips_other": "{{count}} fallos de medición",
+      "errors_one": "{{count}} error de datos nuevo",
+      "errors_many": "{{count}} errores de datos nuevos",
+      "errors_other": "{{count}} errores de datos nuevos",
+      "finalDefects_zero": "ningún defecto",
+      "finalDefects_one": "{{count}} defecto, de un fallo de medición del último ciclo",
+      "finalDefects_many": "{{count}} defectos, cada uno de un fallo de medición del último ciclo",
+      "finalDefects_other": "{{count}} defectos, cada uno de un fallo de medición del último ciclo"
+    },
+    "layersHeading": "Capa a capa",
+    "errors": "Errores",
+    "measurements": "Lecturas",
+    "detectors": "Detectores",
+    "matching": "Emparejamiento",
+    "correction": "Corrección",
+    "verdict": "Veredicto",
+    "explain": {
+      "errors": "En cada ciclo el ruido golpea algunos cúbits de datos (un anillo marca los nuevos) y los errores se componen de un ciclo al siguiente: dos iguales en un cúbit se cancelan. Una cruz en una plaqueta es un fallo de medición: esa lectura saldrá mal, pero ningún cúbit cambia.",
+      "measurements": "En cada ciclo se lee cada estabilizador. Una plaqueta rellena leyó «cambiado»: la paridad de los errores que detecta, que un fallo de medición invierte sólo en ese ciclo. Un error solo mantiene encendidos a sus vecinos hasta la lectura final; dos errores iguales contiguos se cancelan en el estabilizador que comparten.",
+      "detectors": "El decodificador compara cada lectura con la anterior: una lectura que difiere es un defecto. Un error de datos se ve sólo en su ciclo; un fallo de medición se ve dos veces, en el mismo estabilizador en capas consecutivas (la segunda puede ser la lectura final). La lectura final es perfecta.",
+      "matching": "El decodificador empareja los defectos entre sí o con el borde, dentro de un ciclo (tramos espaciales) y entre ciclos (tramos temporales), de modo que el peso total de los caminos, tramos temporales incluidos, sea el mínimo posible: eso puede suponer voltear más cúbits que otro emparejamiento.",
+      "correction": "Sólo los tramos espaciales corrigen algo, en el plano final tras el último ciclo: cada cúbit se voltea tantas veces como tramos espaciales lo cruzan, así que un número par lo deja igual. Los tramos temporales explican lecturas erróneas y no tocan ningún cúbit.",
+      "verdict": "Lo que queda en el plano final es el error acumulado por la corrección. Un producto de estabilizadores significa que el cúbit lógico está intacto; un operador lógico, que la información cambió."
+    },
+    "prev": "Atrás",
+    "next": "Siguiente",
+    "play": "Reproducir",
+    "pause": "Pausa",
+    "restart": "Repetir",
+    "newShot": "Nueva tirada aleatoria",
+    "preset": {
+      "label": "Ejemplos",
+      "flip": "Un fallo de medición",
+      "data": "Un error de datos",
+      "both": "Los dos"
+    },
+    "copy": "Copiar enlace de esta tirada",
+    "copied": "Enlace copiado.",
+    "copyFailed": "No se pudo copiar; cópialo a mano desde la barra de direcciones.",
+    "badLink": "Este enlace no describe una tirada del visor.",
+    "fromLink": "Una tirada recibida por enlace.",
+    "largeDistance": "A esta distancia la pila es densa; d ≤ 7 se lee mejor.",
+    "loading": "Cargando el visor…"
+  },
+  "explain": {
+    "challengeRule": {
+      "title": "¿Qué cuenta como correcto?",
+      "body": "Se acepta cualquier corrección que deje sólo un producto de estabilizadores: ningún defecto y la información codificada intacta. No tiene que ser la del decodificador. La bonificación exige el mismo número de giros X y el mismo número de giros Z que la corrección del decodificador."
+    },
+    "qubit": {
+      "title": "Cúbit de datos",
+      "body": "Un cúbit de datos guarda una parte de la información codificada. El ruido puede voltearlo: X voltea su bit, Z cambia su fase, Y hace las dos cosas. Nadie lee los cúbits de datos directamente, porque los perturbaría; el código sólo pregunta a los estabilizadores que los rodean."
+    },
+    "stabilizer": {
+      "title": "Estabilizador",
+      "body": "Un estabilizador mide la paridad conjunta de sus 2 o 4 cúbits de datos vecinos. Un estabilizador Z se voltea cuando un número impar de ellos lleva componente X; uno X, cuando un número impar lleva componente Z. Un estabilizador volteado es un defecto; el conjunto de defectos es el síndrome."
+    },
+    "matching": {
+      "title": "Emparejamiento",
+      "body": "El decodificador empareja cada defecto con otro defecto o con el borde del código y elige el emparejamiento cuyos caminos voltean el menor número total de cúbits: un emparejamiento perfecto de peso mínimo. La corrección voltea los cúbits de esos caminos. Las cadenas de errores cortas son más probables que las largas."
+    },
+    "distance": {
+      "title": "Distancia",
+      "body": "La distancia d es el tamaño del error más pequeño que cambia la información codificada sin dejar ningún defecto: tiene d volteos, por ejemplo X a lo largo de una columna completa o Z de una fila completa. Cualquier error con como mucho (d − 1)/2 volteos se corrige siempre; uno mayor puede engañar al decodificador."
+    },
+    "verdictRule": {
+      "title": "Por qué este veredicto",
+      "body": "Queda el error por la corrección, sin defectos. Cuenta sus volteos X en cualquier fila completa y sus volteos Z en cualquier columna completa (Y cuenta como ambos). Las dos cuentas pares: producto de estabilizadores, cúbit lógico intacto. Alguna impar: operador lógico; la información cambió y nadie lo notó."
+    },
+    "measurementsPerfect": {
+      "title": "Mediciones perfectas",
+      "body": "Aquí cada estabilizador se mide una vez y sin error: el único ruido está en los cúbits de datos. El hardware real también lee mal los estabilizadores, así que la medición se repite varios ciclos y el decodificador empareja defectos también en el tiempo."
+    },
+    "yError": {
+      "title": "Error Y",
+      "body": "Y = X·Z: un error Y es un volteo X y un volteo Z en el mismo cúbit a la vez. Los estabilizadores Z que lo rodean sólo ven su parte X y los X sólo su parte Z, así que las dos partes se detectan y se corrigen por separado, como si fueran dos errores."
+    },
+    "threshold": {
+      "title": "Umbral",
+      "body": "Por debajo de un umbral, un código mayor falla menos; por encima, más. Cada par de tamaños se cruza en su p: entre el 9 y el 10 % con mediciones perfectas, entre el 2 y el 3 % con fallos de medición (medido frente a PyMatching). A la izquierda de un cruce gana el código mayor (Λ > 1); a la derecha, pierde (Λ < 1)."
+    },
+    "lambda": {
+      "title": "Λ, el factor de supresión",
+      "body": "Λ = P_L(d) / P_L(d + 2) en el p elegido: cuántas veces menos errores lógicos comete el tamaño siguiente. Λ > 1 significa que añadir cúbits ayudó; su intervalo combina la incertidumbre de las dos tasas. Willow (Google, 2024) midió Λ ≈ 2,14 por salto, con otro modelo de ruido."
+    },
+    "logAxis": {
+      "title": "Por qué un eje logarítmico",
+      "body": "Cada línea con cifra es diez veces la de abajo. En un eje lineal toda tasa por debajo del 5 % quedaría pegada al suelo, y la separación entre d = 3 y d = 7 a p bajo, que es todo el mensaje, sería invisible."
+    },
+    "upperBound": {
+      "title": "Marcadores abiertos",
+      "body": "Un punto sin ningún error lógico todavía en N tiradas se dibuja como un marcador abierto con flecha en su cota superior, nunca como cero: con un 95 % de confianza la tasa real está por debajo de unos 4/N. Más tiradas bajan la cota hasta que el primer fallo da un punto medido."
+    },
+    "phenomenological": {
+      "title": "Fallos de medición",
+      "body": "Aquí cada medición también falla con probabilidad p: se repite d veces y una lectura final perfecta la cierra. Un fallo de lectura se ve como dos defectos en un estabilizador, a un ciclo de distancia; un error de datos, una vez, en su ciclo, en los estabilizadores vecinos. El decodificador empareja también en tiempo."
+    },
+    "measurementFlip": {
+      "title": "Un fallo de medición",
+      "body": "Un fallo de medición invierte la lectura de un estabilizador en un ciclo; los cúbits no cambian. Como cada detector compara una lectura con la anterior, da dos defectos en ese estabilizador en capas consecutivas (la segunda puede ser la lectura final). El decodificador los une con un tramo temporal sin corregir cúbits."
+    },
+    "dataErrorPersists": {
+      "title": "Un error de datos persiste",
+      "body": "Un error de datos se queda en su cúbit. Desde su ciclo hasta la lectura final, cada estabilizador vecino lee la paridad de los errores que detecta: un error solo lo mantiene encendido; otro error igual al lado, o un fallo de medición, invierte esa lectura. El detector marca sólo el ciclo en que la lectura cambió."
+    },
+    "finalPlane": {
+      "title": "El plano final",
+      "body": "La corrección actúa sobre los cúbits tras el último ciclo: cada cúbit se voltea tantas veces como tramos espaciales lo cruzan, de cualquier ciclo; un número par lo deja igual. Los tramos temporales no voltean nada. La lectura final no falla, así que cada defecto suyo viene de un fallo de medición del último ciclo."
+    }
+  }
+}

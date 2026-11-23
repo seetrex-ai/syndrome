@@ -1,0 +1,125 @@
+/* The section nav (tasks/plans/design.md D1): the five headings as in-page
+   links. On a phone it is one scrollable row between the hero and the
+   lattice; from 640 px it sticks to the top of the viewport once the hero
+   has scrolled past, painted with --bg so the content slides under it. No
+   motion: nothing here to cancel under prefers-reduced-motion. */
+.app__nav {
+  margin: 1.5rem -1rem 0;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.app__nav-list {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.app__nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.app__nav-list li {
+  flex: 0 0 auto;
+}
+
+/* 44 px targets (design.md T-D2/T-D3) on every width. */
+.app__nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.625rem;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.app__nav-link:hover {
+  color: var(--fg);
+  background: var(--hover-bg);
+}
+
+.app__nav-link[aria-current="true"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.app__nav-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+/* Nothing scrolls under the bar (a 52 px
+   scroll-margin under a bar 93 px tall at 640–799 px left the heading and
+   Shift+Tab's focused controls behind it). `--nav-height` is the bar's
+   measured height, written on <html> by a ResizeObserver in SectionNav.tsx;
+   the values here are the fallbacks (one row of 44 px links + 1 px rule at
+   ≥ 800 px, two rows at 640–799 px) for a browser without it. The scroll
+   container's `scroll-padding-top` covers every scroll-into-view, the anchor
+   jump and the focus one alike; `scroll-margin-top` on the panel is only
+   the breath under the bar. Below 640 px the bar is in flow, not sticky. */
+html {
+  --nav-height: 0px;
+  scroll-padding-top: 0;
+}
+
+.panel {
+  scroll-margin-top: 0.5rem;
+}
+
+/* From 640 px the bar sticks and the links wrap onto a second row when the
+   five do not fit (640–799 px: compact, still 44 px tall); from 1024 px they
+   sit on one row at full size. */
+@media (min-width: 640px) {
+  html {
+    --nav-height: 5.8125rem;
+    scroll-padding-top: var(--nav-height);
+  }
+
+  .app__nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+
+  .app__nav-list {
+    flex-wrap: wrap;
+    gap: 0 0.25rem;
+    overflow: visible;
+  }
+
+  .app__nav-link {
+    padding: 0 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 800px) {
+  html {
+    --nav-height: 2.9375rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app__nav-list {
+    gap: 0 0.5rem;
+  }
+
+  .app__nav-link {
+    padding: 0 0.875rem;
+    font-size: 1rem;
+  }
+}

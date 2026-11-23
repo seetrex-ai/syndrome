@@ -1,0 +1,350 @@
+/* Spacetime viewer (tasks/plans/phase2-g.md D11, D12). Colours are tokens in
+   the pattern of grid.css (light-dark()).
+   Reused from grid.css: --pauli-x/z/y, --plaquette-z/x, --plaquette-stroke,
+   --defect, --defect-stroke, --qubit, --qubit-stroke, --match, --residual. */
+:root {
+  --layer-fill-opacity: 0.45;
+  --measured: light-dark(#fff3bf, #5c4a00);
+  --measured-stroke: light-dark(#b36b00, #e8b300);
+  /* The readings once the detectors are on (step ≥ 2): stepped back by TOKEN,
+     never by `opacity` (0.6 painted the stroke at 2.24:1);
+     the stroke keeps ≥ 3:1 on --bg, on --surface and on its own fill in both
+     themes (#bd7f1f gave 2.76 on the card). */
+  --measured-dim: light-dark(#fff9e6, #3d3300);
+  --measured-stroke-dim: light-dark(#a86f12, #c7a03c);
+  --flip-mark: light-dark(#c92a2a, #ff8787);
+  --time-edge: light-dark(#5f3dc4, #b197fc);
+  --new-ring: light-dark(#212529, #f8f9fa);
+}
+
+/* Safari < 17.5 has no light-dark(): the light side, plain (theme-tokens test). */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    --measured: #fff3bf;
+    --measured-stroke: #b36b00;
+    --measured-dim: #fff9e6;
+    --measured-stroke-dim: #a86f12;
+    --flip-mark: #c92a2a;
+    --time-edge: #5f3dc4;
+    --new-ring: #212529;
+  }
+}
+
+.spacetime__intro {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.spacetime__model,
+.spacetime__note {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Shot controls: presets and the viewer's own p; look controls: view and gap
+   (a segmented control and a slider, controls.css). Mobile first: one
+   column; two columns from 640 px. */
+.spacetime__shot,
+.spacetime__look {
+  display: grid;
+  gap: 0.75rem 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.spacetime__presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.spacetime__presets legend {
+  float: left;
+  padding: 0;
+  margin-right: 0.25rem;
+  font-weight: 500;
+}
+
+/* Both rows stay one column at every width. The shot row: the presets and
+   the viewer's p slider side by side pushed the slider past the right edge
+   (measured in Chrome: 1 006 px of scroll at 768 and at 960; `minmax(0, 1fr)`
+   pairs still 647 at 640) and the slider's label wrapped onto four lines
+   beside the chips. The look row: the view beside the spread slider left the
+   slider a 149–228 px column from 640 to 1 023 px, and its fixed 10 rem track
+   and value ran past the page (2026-10-20, fix/small-phones: 733 px of
+   scroll for 640–700 px in Spanish, 670 in English). */
+
+/* The six steps are the stepper of controls.css (design.md D4); the list
+   keeps its hooks (.spacetime__steps, .spacetime__step, data-done,
+   aria-current). */
+
+/* The stack: full width, never wider than the page (no horizontal scroll at
+   360 px); tall stacks scroll vertically with the page. Touch gestures stay
+   the browser's (test_intent_gesture_never_blocks_scroll). */
+.spacetime__svg {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  height: auto;
+  margin: 0 auto;
+  /* On --bg inside the card (design.md §2 B): the
+     readings and edges are pinned against --bg. */
+  background: var(--bg);
+  border-radius: var(--radius-card);
+  touch-action: pan-x pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Size, face and weight are the <text>'s inline style (projection.ts
+   TITLE_FONT_*): the gutter is sized from them, so no rule here may declare a
+   font (tests/intent/layer-title-font.test.ts). */
+.st-layer__title {
+  fill: var(--muted);
+}
+
+/* A plane's quiet plaquettes are translucent so the stack reads as layers: the
+   fill is décor, every informative mark (defects, readings, edges, discs) is
+   drawn at opacity 1, the readings below and the rest in the overlay
+   (tests/intent/theme-contrast lists this rule as deliberate de-emphasis). */
+.st-plaquette {
+  stroke: var(--plaquette-stroke);
+  stroke-width: 1;
+  opacity: var(--layer-fill-opacity);
+  transition:
+    fill 150ms ease,
+    stroke 150ms ease,
+    opacity 150ms ease;
+}
+
+.st-layer--final .st-plaquette {
+  opacity: 1;
+}
+
+.st-plaquette--Z {
+  fill: var(--plaquette-z);
+}
+
+.st-plaquette--X {
+  fill: var(--plaquette-x);
+}
+
+/* A reading is informative: opaque, whatever its plane's fill opacity. */
+.st-plaquette[data-measured="1"] {
+  fill: var(--measured);
+  stroke: var(--measured-stroke);
+  stroke-width: 2;
+  opacity: 1;
+}
+
+/* Once the detectors are on, the readings step back: by token, the stroke
+   still ≥ 3:1 on --bg and on --measured-dim. */
+.panel--spacetime[data-step="2"] .st-plaquette[data-measured="1"],
+.panel--spacetime[data-step="3"] .st-plaquette[data-measured="1"],
+.panel--spacetime[data-step="4"] .st-plaquette[data-measured="1"],
+.panel--spacetime[data-step="5"] .st-plaquette[data-measured="1"] {
+  fill: var(--measured-dim);
+  stroke: var(--measured-stroke-dim);
+  stroke-width: 1;
+}
+
+/* The final plane keeps its full reading colours whatever the step says:
+   same specificity as the step rules above, later in the
+   sheet. */
+.panel--spacetime .st-layer--final .st-plaquette[data-measured="1"] {
+  fill: var(--measured);
+  stroke: var(--measured-stroke);
+}
+
+/* Defects are drawn in the overlay, above every plane, and
+   first inside their layer, so the flip mark, the error disc and the
+   correction rings they would cover come after them. */
+.st-overlay .st-defect {
+  fill: var(--defect);
+  stroke: var(--defect-stroke);
+  stroke-width: 2.5;
+  opacity: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: st-pop 320ms ease-out;
+}
+
+/* Motion with intent (design.md D6): a defect lights up when its step
+   arrives; an edge draws itself (pathLength="1" on the element). Both ≤ 400
+   ms, both at mount only, both off under prefers-reduced-motion. */
+@keyframes st-pop {
+  from {
+    transform: scale(0.85);
+  }
+}
+
+@keyframes st-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+.st-flip line {
+  stroke: var(--flip-mark);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.st-qubit__disc {
+  fill: var(--qubit);
+  stroke: var(--qubit-stroke);
+  stroke-width: 1.5;
+  transition:
+    fill 150ms ease,
+    stroke 150ms ease;
+}
+
+/* A plane's qubit at rest (its history is in the overlay):
+   décor, like the plane's fill (deliberate de-emphasis, theme-contrast test). */
+.st-layer:not(.st-layer--final) .st-qubit[data-rest="1"] .st-qubit__disc {
+  opacity: 0.5;
+}
+
+.st-qubit[data-pauli="X"] .st-qubit__disc {
+  fill: var(--pauli-x);
+}
+
+.st-qubit[data-pauli="Z"] .st-qubit__disc {
+  fill: var(--pauli-z);
+}
+
+.st-qubit[data-pauli="Y"] .st-qubit__disc {
+  fill: var(--pauli-y);
+}
+
+.st-qubit__new {
+  fill: none;
+  stroke: var(--new-ring);
+  stroke-width: 2;
+}
+
+.st-qubit__correction {
+  fill: none;
+  stroke: var(--match);
+  stroke-width: 3;
+  stroke-dasharray: 3 2;
+}
+
+.st-qubit__residual {
+  fill: none;
+  stroke: var(--residual);
+  stroke-width: 3;
+}
+
+.st-edge {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: opacity 150ms ease;
+}
+
+/* A space edge draws itself when its step arrives (D6; pathLength="1" set by
+   SpacetimeSvg). Time edges keep their own dashes and simply appear. */
+.st-edge--space {
+  stroke-dasharray: 1;
+  animation: st-draw 400ms ease-out;
+}
+
+/* The Z decoder corrects X errors and vice versa (as .chain--Z in grid.css). */
+.st-edge--space.st-edge--Z {
+  stroke: var(--pauli-x);
+}
+
+.st-edge--space.st-edge--X {
+  stroke: var(--pauli-z);
+}
+
+.st-edge--time {
+  stroke: var(--time-edge);
+  stroke-dasharray: 8 6;
+}
+
+/* Once the correction is shown, the space edges are redundant with the
+   correction rings on the qubits (SpacetimeSvg: `dim` = showCorrection && space)
+   and step behind them: deliberate de-emphasis of a mark that no longer carries
+   the information (theme-contrast test lists it; 1.8:1 painted, not pinned). */
+.st-edge--dim {
+  opacity: 0.35;
+}
+
+/* The per-layer counts, a Disclosure (controls.css: its toggle is a 44 px
+   target like the old <summary>). */
+.spacetime__layers {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+}
+
+.spacetime__layers ol {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+}
+
+/* The step text: the name on its own line in the display face, the body in a
+   readable measure (D8: the walkthrough's content, never clamped). */
+.spacetime__explain {
+  max-width: 62ch;
+  min-height: 3.5rem;
+  margin: 1rem 0 0.25rem;
+  line-height: 1.45;
+}
+
+.spacetime__name {
+  display: block;
+  margin-bottom: 0.125rem;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.spacetime__verdict {
+  margin-top: 0.25rem;
+}
+
+/* Four navigation buttons in two rows of two under 640 px; one row above. */
+.spacetime__controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.spacetime__share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .spacetime__controls {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+/* Every transition and animation of this sheet, off for people who asked
+   (D14; tests/intent/reduced-motion.test.ts). */
+@media (prefers-reduced-motion: reduce) {
+  .st-plaquette,
+  .st-overlay .st-defect,
+  .st-qubit__disc,
+  .st-edge,
+  .st-edge--space {
+    transition: none;
+    animation: none;
+  }
+}

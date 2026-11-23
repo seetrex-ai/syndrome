@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The brand mark of src/ui/brand/Brand.tsx on the dark side of the
+       "Tinta y vino" tokens (src/index.css, src/ui/grid/grid.css): badge bg
+       #101214, the plum accent #d98ab8 on the Z plaquettes, the LIGHT
+       side of the X plaquette token (#fde6cf) on the X ones (its dark side, #4a2e16,
+       was 1.5:1 on the badge: invisible at 16 px),
+       the qubits in the badge colour so they read as holes in the
+       plaquettes. tests/intent/design-conventions checks every colour here
+       is a token side. The corners outside the rounded badge are
+       transparent: the PNG icons are rendered with omitBackground
+       (tools/og/og-svg.ts header). -->
+  <rect width="32" height="32" rx="7" fill="#101214"/>
+  <rect x="6" y="6" width="10" height="10" rx="1.5" fill="#d98ab8"/>
+  <rect x="16" y="6" width="10" height="10" rx="1.5" fill="#fde6cf"/>
+  <rect x="6" y="16" width="10" height="10" rx="1.5" fill="#fde6cf"/>
+  <rect x="16" y="16" width="10" height="10" rx="1.5" fill="#d98ab8"/>
+  <g fill="#101214">
+    <circle cx="6" cy="6" r="2.4"/><circle cx="16" cy="6" r="2.4"/><circle cx="26" cy="6" r="2.4"/>
+    <circle cx="6" cy="16" r="2.4"/><circle cx="16" cy="16" r="2.4"/><circle cx="26" cy="16" r="2.4"/>
+    <circle cx="6" cy="26" r="2.4"/><circle cx="16" cy="26" r="2.4"/><circle cx="26" cy="26" r="2.4"/>
+  </g>
+</svg>

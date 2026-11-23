@@ -1,0 +1,381 @@
+/* Colours live here, not in TypeScript constants (tasks/plans/ui.md D4, R4). */
+:root {
+  /* Ratios pinned by tests/intent/theme-contrast.test.ts:
+     strokes ≥ 3:1 on what they cross, text ≥ 4.5:1 on what it sits on. */
+  --pauli-x: light-dark(#c4420a, #ff8c42);
+  --pauli-z: light-dark(#1a5fb4, #5aaeff);
+  --pauli-y: light-dark(#7d2fa3, #d88cf7);
+  --plaquette-z: light-dark(#d6e8fb, #17304d);
+  --plaquette-x: light-dark(#fde6cf, #4a2e16);
+  --plaquette-stroke: light-dark(#aeb4bf, #4a5361);
+  /* Dark: a dark amber, 3.46 on --bg and 3.19 on --surface (the current step
+     pill of the stepper sits on the card; #7a5c00 gave
+     2.76 there), so the light matching line AND the correction chains,
+     which run across the defects, stay ≥ 3:1 over it (measured by
+     pixel: the chains sat on the defect fill at 1.7–1.9 with the
+     previous #b38a08; the dark chains below are a step lighter for this
+     amber). In dark the signal is the border too. */
+  --defect: light-dark(#ffd43b, #866500);
+  --defect-stroke: light-dark(#b35c00, #ffd43b);
+  /* Text on a --defect fill (the current step pill and its number): dark on
+     the light amber, white on the dark one. */
+  --on-defect: light-dark(#15181d, #ffffff);
+  --qubit: light-dark(#ffffff, #1c2129);
+  --qubit-stroke: light-dark(#4a5160, #c3c9d3);
+  --match: light-dark(#2b3038, #f4f5f7);
+  /* Correction chains: the Pauli colours softened by TOKEN, never by `opacity`
+     (0.55 painted them at 2.4:1); ≥ 3:1 on --bg, on both
+     plaquette fills and on --defect (a chain runs along the defects it joins)
+     in both themes. The Z decoder corrects X errors (--chain-x). */
+  --chain-x: light-dark(#d2400c, #ffbd70);
+  --chain-z: light-dark(#1971c2, #9ad2fc);
+  /* Also text (the verdict, the challenge clock): ≥ 4.5 on --bg and on
+     --surface, where the verdicts sit from 640 px (#cf2a2a gave 4.27 on the
+     card): 5.86 / 5.23 in light. */
+  --residual: light-dark(#c22525, #ff6b6b);
+  /* The keyboard focus ring, a solid stroke at full opacity (the 0.35
+     halo painted at 1.58:1 and was the only focus indicator). */
+  --focus: light-dark(#1c7ed6, #74c0fc);
+  /* The Pauli letter on a coloured disc: the dark palette's discs are light. */
+  --on-pauli: light-dark(#ffffff, #15181d);
+}
+
+/* Safari < 17.5 has no light-dark(): the light side, plain (theme-tokens test). */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    --pauli-x: #c4420a;
+    --pauli-z: #1a5fb4;
+    --pauli-y: #7d2fa3;
+    --plaquette-z: #d6e8fb;
+    --plaquette-x: #fde6cf;
+    --plaquette-stroke: #aeb4bf;
+    --defect: #ffd43b;
+    --defect-stroke: #b35c00;
+    --on-defect: #15181d;
+    --qubit: #ffffff;
+    --qubit-stroke: #4a5160;
+    --match: #2b3038;
+    --chain-x: #d2400c;
+    --chain-z: #1971c2;
+    --residual: #c22525;
+    --focus: #1c7ed6;
+    --on-pauli: #ffffff;
+  }
+}
+
+/* The lattice sits on --bg inside the card (design.md §2 B): every stroke
+   and fill is pinned against --bg, so --bg is what it is
+   painted on, with the card's radius. */
+.grid {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: auto;
+  margin: 0 auto;
+  background: var(--bg);
+  border-radius: var(--radius-card);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.plaquette {
+  stroke: var(--plaquette-stroke);
+  stroke-width: 1;
+  transition:
+    fill 120ms ease,
+    stroke 120ms ease;
+}
+
+.plaquette--Z {
+  fill: var(--plaquette-z);
+}
+
+.plaquette--X {
+  fill: var(--plaquette-x);
+}
+
+/* A defect lights up when it appears (design.md D6: motion with intent, at
+   mount only, ≤ 400 ms, off under prefers-reduced-motion). */
+.plaquette[data-defect="1"] {
+  fill: var(--defect);
+  stroke: var(--defect-stroke);
+  stroke-width: 2.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: grid-pop 320ms ease-out;
+}
+
+/* Matching edges fade in when they appear (D14); the keyframe only sets the
+   start, the end is opacity 1: no informative mark is dimmed by `opacity`
+   (tests/intent/theme-contrast forbids it). A chain draws
+   itself from its first defect (D6): ChainLayer sets pathLength="1", so one
+   dash of length 1 offset by 1 is the whole chain hidden, offset 0 the whole
+   chain drawn. The matching edge keeps the fade: it is dashed, the trick
+   would eat its dashes. */
+.match {
+  fill: none;
+  stroke: var(--match);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  animation: grid-fade-in 250ms ease;
+}
+
+.chain {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  animation: grid-draw 400ms ease-out;
+}
+
+@keyframes grid-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes grid-pop {
+  from {
+    transform: scale(0.85);
+  }
+}
+
+@keyframes grid-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* The Z decoder corrects X errors and vice versa. */
+.chain--Z {
+  stroke: var(--chain-x);
+}
+
+.chain--X {
+  stroke: var(--chain-z);
+}
+
+.qubit__halo {
+  fill: transparent;
+}
+
+/* The focus ring: invisible until the qubit has keyboard focus. */
+.qubit__focus {
+  fill: none;
+  stroke: none;
+  stroke-width: 3;
+}
+
+.qubit__disc {
+  fill: var(--qubit);
+  stroke: var(--qubit-stroke);
+  stroke-width: 2;
+  transition:
+    fill 120ms ease,
+    stroke 120ms ease;
+}
+
+.qubit[role="button"] {
+  cursor: pointer;
+}
+
+.qubit[role="button"]:hover .qubit__disc {
+  stroke-width: 3;
+}
+
+/* No outline: the ring below is the focus indicator (≥ 3:1 on --bg and on both
+   plaquette fills in both themes, theme-contrast test). */
+.qubit:focus {
+  outline: none;
+}
+
+.qubit:focus-visible .qubit__focus {
+  stroke: var(--focus);
+}
+
+.qubit[data-pauli="X"] .qubit__disc {
+  fill: var(--pauli-x);
+}
+
+.qubit[data-pauli="Z"] .qubit__disc {
+  fill: var(--pauli-z);
+}
+
+.qubit[data-pauli="Y"] .qubit__disc {
+  fill: var(--pauli-y);
+}
+
+.qubit__label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--on-pauli);
+  pointer-events: none;
+}
+
+.qubit:not([data-correction="I"]) .qubit__disc {
+  stroke-dasharray: 3 2;
+  stroke-width: 3;
+}
+
+.qubit:not([data-residual="I"]) .qubit__halo {
+  fill: none;
+  stroke: var(--residual);
+  stroke-width: 3;
+}
+
+/* Controls of the lattice panel, mobile first (the panel card itself is in
+   index.css): the distance segments, the p slider and the two buttons each
+   take a row under 640 px and flow in one row above it. */
+.panel--grid .controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel--grid .distance {
+  flex: 1 1 100%;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.control__label {
+  font-weight: 500;
+}
+
+.control input[type="range"] {
+  flex: 1 1 6rem;
+  min-width: 0;
+}
+
+.panel--grid .controls .btn {
+  flex: 1 1 auto;
+}
+
+/* On a phone a slider's label takes its own row and the track the full width
+   below it, next to its value (2026-10-20, fix/small-phones: beside the
+   track the labels wrapped onto two lines at 320 px and the viewer's p track
+   shrank to 45 px). */
+@media (max-width: 639.98px) {
+  .control {
+    flex-wrap: wrap;
+    row-gap: 0.125rem;
+  }
+
+  .control__label {
+    flex: 1 0 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .panel--grid .controls {
+    gap: 0.75rem 1.25rem;
+  }
+
+  .panel--grid .distance,
+  .control {
+    flex: 0 1 auto;
+  }
+
+  .control input[type="range"] {
+    flex: 0 0 10rem;
+  }
+
+  .panel--grid .controls .btn {
+    flex: 0 0 auto;
+  }
+}
+
+.qubit__hit {
+  fill: transparent;
+}
+
+.control__value {
+  min-width: 3.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.verdict {
+  margin: 1rem 0 0.25rem;
+  font-weight: 600;
+}
+
+.verdict[data-verdict="0"] {
+  color: var(--ok);
+}
+
+.verdict:not([data-verdict="0"]) {
+  color: var(--residual);
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 1px solid var(--plaquette-stroke);
+  border-radius: 2px;
+}
+
+.swatch--z {
+  background: var(--plaquette-z);
+}
+
+.swatch--x {
+  background: var(--plaquette-x);
+}
+
+.swatch--defect {
+  background: var(--defect);
+  border-color: var(--defect-stroke);
+}
+
+.swatch--chain {
+  height: 0.35rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--chain-x);
+}
+
+/* Every transition and animation of this sheet, off for people who asked
+   (D14; tests/intent/reduced-motion.test.ts checks the list is complete). */
+@media (prefers-reduced-motion: reduce) {
+  .plaquette,
+  .plaquette[data-defect="1"],
+  .match,
+  .chain,
+  .qubit__disc {
+    transition: none;
+    animation: none;
+  }
+}

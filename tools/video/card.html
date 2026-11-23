@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>card</title>
+    <!-- Title and closing cards (tasks/plans/video.md D9): the texts are the
+         app's own i18n strings, substituted by the script; the colours are
+         the LIGHT side of the app's tokens (src/index.css: paper, ink, the
+         muted text, the wine accent for the URL) and the titles use the
+         app's display face, inlined by capture.ts as a data URL because the
+         page is loaded with setContent (no origin to fetch /fonts from).
+         tests/intent/video-camera.test.tsx pins every colour to a token side
+         and the font to the one the app ships. -->
+    <style>
+      @font-face {
+        font-family: "Space Grotesk";
+        src: url("{{font}}") format("woff2");
+        font-weight: 300 700;
+        font-style: normal;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #ffffff;
+        color: #111316;
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 0 8vw;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .line1 {
+        margin: 0;
+        font-family:
+          "Space Grotesk",
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 10vmin;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.05;
+      }
+      .line2 {
+        margin: 2vmin 0 0;
+        font-size: 5.5vmin;
+        color: #4a5160;
+      }
+      .url {
+        margin: 6vmin 0 0;
+        font-family:
+          "Space Grotesk",
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 3.6vmin;
+        font-weight: 600;
+        color: #7a2238;
+      }
+      .url:empty {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="line1">{{line1}}</p>
+    <p class="line2">{{line2}}</p>
+    <p class="url">{{url}}</p>
+  </body>
+</html>

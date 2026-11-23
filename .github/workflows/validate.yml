@@ -1,0 +1,57 @@
+name: validate
+
+# Runs the TypeScript core on the validation grid of each noise model and compares it
+# with the committed PyMatching reference whenever something that can change the curves
+# is pushed (docs/spec.md §6, tasks/plans/validation.md D11, tasks/plans/phase2.md D6/D9).
+# The published base curves (docs/validacion/browser*.json) must be exactly what the
+# committed core produces: a core change means regenerating and committing the browser
+# file(s) (and the reference files with `uv run tools/reference/run.py [--model
+# phenomenological]` when the shared contract changes). No Python here: the reference
+# and fixture files are committed artefacts.
+on:
+  push:
+    paths:
+      - "src/core/**"
+      - "tools/validate/**"
+      - "docs/validacion/**"
+      - "package*.json"
+      - ".nvmrc"
+      - ".github/workflows/validate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: npm run validate --model ${{ matrix.model }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The phase 1 grid is ≈ 20 s on a laptop; a run still going after 15 min is
+          # hung (a Blossom loop without its bound), not slow.
+          - model: independent
+            browser: docs/validacion/browser.json
+            timeout: 15
+          # The phenomenological grid is ≈ 5.5 min on a laptop (measured 2026-10-17);
+          # the runner is 2–3× slower. Above 30 min, lower minShots to 5·10⁴ for this model only (phase2.md D6).
+          - model: phenomenological
+            browser: docs/validacion/browser-phenomenological.json
+            timeout: 45
+    timeout-minutes: ${{ matrix.timeout }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # --no-docs: docs/validacion.md carries the date and is written locally,
+      # not by CI. Exit code 1 if any gate fails (the table is in the log).
+      - run: npm run validate -- --model ${{ matrix.model }} --no-docs
+      # The regenerated browser file must be byte-identical to the committed one: the
+      # simulation is deterministic (seeded integer PRNG, integer weights, one sqrt),
+      # so any diff is either an uncommitted core change or a real discrepancy (R6).
+      - run: git diff --exit-code -- ${{ matrix.browser }}

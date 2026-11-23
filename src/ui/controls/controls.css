@@ -1,0 +1,548 @@
+/* The three controls of the redesign (tasks/plans/design.md D4) and the button
+   classes. Every colour is a token of index.css / grid.css; the only colour
+   declared here is through var(). Native elements underneath: a visually
+   hidden radio per segment (never display: none: it keeps focus and the arrow
+   keys), a native range with appearance: none, a plain <button>. */
+
+/* Segmented control: fieldset + legend + hidden radios + labels. */
+.segmented {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* A floated legend leaves the fieldset's "legend slot" and becomes an ordinary
+   flex item beside the options; its semantics (the group's name) are intact. */
+.segmented__legend {
+  float: left;
+  padding: 0;
+  font-weight: 500;
+}
+
+.segmented__options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+.app__header .segmented__options {
+  background: var(--surface);
+}
+
+.segmented__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 44 px tall AND wide on a phone (docs/spec.md §4.8, tests/intent/design-conventions
+   test_intent_touch_targets_on_phone; 38 px tall was a regression from main,
+   and the distance segments "3", "5", "7"
+   were 37 px wide), compact from 640 px. */
+.segmented__option {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+/* A full-width segmented control with two long labels (the chart's noise
+   model, the viewer's view): the legend above, the segments share the width.
+   On a phone, at the default font size, each label keeps one line
+   (2026-10-20, fix/small-phones: they
+   wrapped onto two lines, and the view's pill stacked its two options inside
+   a lopsided outline): 0.875 rem with 0.375 rem of padding fits from 360 px
+   (widest, "Perfect measurements", 141 px in a 147 px segment, Chrome);
+   under 360 px the two segments stack, each the full width. The same
+   0.875 rem on a desktop (2026-10-27): in
+   the first figure's right column the segment is 165–168 px at 960 px and the
+   label wrapped up to ~1 080 px at 1 rem (162 px of text); at 0.875 rem with
+   0.5 rem of side padding it needs 157 px. */
+.segmented--fill {
+  flex-wrap: wrap;
+}
+
+.segmented--fill .segmented__legend {
+  flex: 1 1 100%;
+  margin-bottom: 0.375rem;
+}
+
+.segmented--fill .segmented__options {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.segmented--fill .segmented__option {
+  flex: 1 1 0;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+@media (max-width: 639.98px) {
+  .segmented--fill .segmented__options {
+    flex-wrap: nowrap;
+  }
+
+  /* No nowrap: with an enlarged browser font a label that no longer fits
+     wraps inside its segment instead of running into the next one
+     (measured at a 20 px root font). */
+  .segmented--fill .segmented__option {
+    padding: 0 0.375rem;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .segmented--fill .segmented__options {
+    flex-direction: column;
+    border-radius: 1.5rem;
+  }
+}
+
+/* A segment with an icon (the theme control): on a phone the icon alone, its
+   text visually hidden but still the option's accessible name; from 640 px
+   the text alone, as before (the min-width block at the end of the sheet). */
+.segmented__option--icon {
+  gap: 0.375rem;
+}
+
+@media (max-width: 639.98px) {
+  .segmented__option--icon .segmented__text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.segmented__option:hover {
+  background: var(--hover-bg);
+}
+
+.segmented__input:checked + .segmented__option {
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: 600;
+}
+
+.segmented__input:focus-visible + .segmented__option {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.segmented__input:disabled + .segmented__option {
+  color: var(--muted);
+  cursor: default;
+}
+
+.segmented__input:disabled + .segmented__option:hover {
+  background: transparent;
+}
+
+/* Slider: a native range, the track painted up to the thumb with --fill (set
+   by Slider.tsx as a percentage). WebKit and Gecko pseudo-elements in separate
+   rules on purpose: one unknown selector would void a shared rule. */
+.slider__input {
+  /* The filled share of the track; Slider.tsx sets it inline per value. */
+  --fill: 0%;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 2.75rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slider__input::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--accent) var(--fill),
+    var(--border) var(--fill)
+  );
+}
+
+.slider__input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: calc((6px - 1.5rem) / 2);
+  border: 3px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.slider__input::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.slider__input::-moz-range-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.slider__input::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.slider__input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+/* Buttons: one base class, three variants (D4). Disabled by colour, never by
+   opacity (tests/intent/theme-contrast). */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 1.125rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* Playback icons (controls/icons.tsx): decorative, in the label's ink. */
+.btn__icon {
+  flex: none;
+}
+
+/* Play and Pause swap in place: one width for both labels in every locale
+   (widest measured: «Reproducir» with its icon, 141.6 px at 16 px = 8.85em),
+   so Next and Repeat never shift when playback starts. */
+.btn--play {
+  min-width: 9.25em;
+}
+
+.btn:hover {
+  background: var(--hover-bg);
+}
+
+.btn:active {
+  background: var(--active-bg);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* Hover on the ink: a lightness step of its own token (--ink-hover; the 5 %
+   translucent --hover-bg was invisible on it). */
+.btn--primary:hover {
+  border-color: var(--ink-hover);
+  background: var(--ink-hover);
+}
+
+.btn--primary:active {
+  background: var(--ink);
+  box-shadow: inset 0 0 0 100vmax var(--active-bg);
+}
+
+.btn--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.btn:disabled,
+.btn:disabled:hover {
+  border-color: transparent;
+  background: var(--badge-dim);
+  color: var(--muted);
+  box-shadow: none;
+  cursor: default;
+}
+
+/* A chip: the presets of the viewer and the "?" of Explain (D4); 44 px tall
+   on a phone like every button, 32 px from 640 px. */
+.btn--chip {
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* A CSS chevron (no text, no SVG path): a rotated corner in the current colour,
+   turned up when its control is open. */
+.chevron {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: -0.25rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+[aria-expanded="true"] > .chevron {
+  margin-top: 0.25rem;
+  transform: rotate(225deg);
+}
+
+/* Disclosure (D4): the toggle is a 44 px target like the old <summary>. */
+.disclosure__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.disclosure__toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.disclosure__body[hidden] {
+  display: none;
+}
+
+/* Clamp (D8): the text cut to --lines lines while data-clamped="1"; the
+   toggle, present only when the text overflows, sits at the end. */
+.clamp {
+  /* Lines kept while clamped; Clamp.tsx sets it per instance. */
+  --lines: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.clamp__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.clamp[data-clamped="1"] .clamp__text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines);
+  line-clamp: var(--lines);
+  overflow: hidden;
+}
+
+.clamp__toggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg);
+  color: inherit;
+  cursor: pointer;
+}
+
+.clamp__toggle[hidden] {
+  display: none;
+}
+
+.clamp__toggle:hover {
+  background: var(--hover-bg);
+}
+
+.clamp__toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Stepper (D4): the steps of the two walkthroughs. A number in a disc and the
+   step's name, a short connector to the next; the current step on the defect
+   colour, a step reached in ink, one not yet reached dimmed by colour
+   (--muted / --badge-dim), never by opacity (tests/intent/theme-contrast). */
+.stepper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 0.25rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  font-size: 0.875rem;
+}
+
+.stepper__step {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.75rem 0.2rem 0.25rem;
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.stepper__step::before {
+  counter-increment: step;
+  content: counter(step);
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--badge-dim);
+  color: var(--on-badge-dim);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+/* The connector between two steps: a dash drawn OUTSIDE the pill, in the
+   row gap (absolute from the pill's right edge, so the current pill's fill
+   never encloses it), and only from 1024 px, where
+   the five steps of both walkthroughs fit on one row in English and Spanish
+   (measured in Chrome: 640 and 800 px wrap and a connector would dangle at
+   the end of a row). Below it the list gets a flex gap and no dash. */
+@media (min-width: 1024px) {
+  .stepper {
+    gap: 0.375rem 1.25rem;
+  }
+
+  .stepper__step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 0.75rem;
+    height: 2px;
+    margin: -1px 0 0 0.25rem;
+    border-radius: 1px;
+    background: var(--border);
+  }
+}
+
+.stepper__step[data-done="1"] {
+  color: var(--fg);
+}
+
+.stepper__step[data-done="1"]::before {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* The current step: the defect amber with its stroke as a hairline, so the
+   pill's edge reads on the card in both themes (--defect-stroke ≥ 3:1 on
+   --surface, tests/intent/theme-contrast; the light amber fill alone is
+   1.3:1 there, the dark one 3.19). */
+.stepper__step[aria-current="step"] {
+  background: var(--defect);
+  color: var(--on-defect);
+  box-shadow: inset 0 0 0 1px var(--defect-stroke);
+  font-weight: 600;
+}
+
+.stepper__step[aria-current="step"]::before {
+  background: var(--on-defect);
+  color: var(--defect);
+}
+
+@media (min-width: 640px) {
+  .segmented__option {
+    min-height: 1.875rem;
+  }
+
+  .segmented__option--icon .btn__icon {
+    display: none;
+  }
+
+  .btn--chip {
+    min-height: 2rem;
+  }
+
+  .clamp__toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+    min-height: 2.25rem;
+  }
+
+  .slider__input {
+    min-height: 2.25rem;
+  }
+
+  .btn {
+    min-height: 2.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented__option,
+  .btn {
+    transition: none;
+    animation: none;
+  }
+}

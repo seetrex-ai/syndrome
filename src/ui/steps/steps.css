@@ -1,0 +1,83 @@
+/* Step-by-step panel (phase 1; mobile first like the rest of the app). */
+.steps__intro {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* The step pills are the stepper of controls.css (design.md D4): the list
+   keeps its hooks (.steps__list, .steps__item, data-done, aria-current). */
+
+/* The step text: its name on a line of its own in the display face, the body
+   in a readable measure (D8: the walkthrough's content, never clamped). */
+.steps__explain {
+  max-width: 62ch;
+  min-height: 3.5rem;
+  margin: 1rem 0 0.25rem;
+  line-height: 1.45;
+}
+
+.steps__name {
+  display: block;
+  margin-bottom: 0.125rem;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.steps__verdict {
+  margin-top: 0.25rem;
+}
+
+/* Mobile first: the four navigation buttons in two rows of two, "new shot"
+   full width underneath; one row with "new shot" pushed right from 640 px. */
+.steps__controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.steps__new {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 640px) {
+  .steps__controls {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .steps__new {
+    margin-left: auto;
+  }
+}
+
+/* The noise model of the walkthrough, above its explanations. */
+.steps__model {
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Layers appear one step at a time; a soft fade makes each addition readable. */
+.panel--steps .plaquette,
+.panel--steps .match,
+.panel--steps .chain,
+.panel--steps .qubit__halo {
+  transition:
+    fill 150ms ease,
+    stroke 150ms ease,
+    opacity 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel--steps .plaquette,
+  .panel--steps .match,
+  .panel--steps .chain,
+  .panel--steps .qubit__halo {
+    transition: none;
+    animation: none;
+  }
+}

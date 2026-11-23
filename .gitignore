@@ -1,0 +1,25 @@
+node_modules/
+dist/
+coverage/
+# npm run video (tools/video): frames, manifests, MP4 and WebM
+out/
+*.tsbuildinfo
+*.log
+.DS_Store
+Thumbs.db
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Cloudflare (wrangler state)
+.wrangler/
+
+# Local browser-automation snapshots
+/.*-mcp/
+
+# Python (tools/reference)
+__pycache__/
+*.py[cod]
+.venv/
